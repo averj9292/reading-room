@@ -1,25 +1,23 @@
 # Reading Room
 
-Original reading-practice software for teacher review. No accounts, ads, analytics, microphone, or student-data uploads.
-
-## Publish
-
-In repository Settings → Pages, choose Deploy from a branch, `main`, and `/ (root)`, then Save. The root `index.html` is the complete app, including audio. No build step is needed.
+Original reading practice focused on Grades 2–4, with age-neutral foundational activities for older readers. Built for teacher review, not a validated intervention replacement.
 
 ## Included
 
-12 lesson groups, 11 word lessons with 12 mixed questions each, 6 original stories with 18 comprehension questions, spoken instructions and words, letter-tile building, replay buttons, hints, and retries. All lesson groups are open. Progress and first-try counts last only for the current page visit.
+38 lesson groups across sound games, first words, letter teams, long vowels, more patterns, word parts, and meaning and stories. 37 practice lessons each contain a guided example and 12 main questions (444 total). Missed or assisted targets receive up to six additional review questions. Ten original passages use a read-and-reread routine and 30 comprehension questions.
 
-## Offline
+Spoken instructions and words, letter-tile building, vocabulary, prefixes and suffixes, hints, retries, and session-only activity counts. All lessons are open, with no grade labels or level locks.
 
-In the app, open Privacy & offline copy and download the HTML file. Open that file in a browser. Audio is bundled, and the downloaded copy does not include answers or progress from the current visit.
+## Hosting and offline
+
+GitHub Pages serves main at the repository root. index.html contains the entire app, including audio; no build step is needed. Use Privacy & offline copy in the app to download a self-contained HTML file without current answers or progress.
 
 ## Privacy
 
-The app requests no names or account details. Activity is processed only in page memory and disappears on reload or close. No cookies, browser storage, external scripts, voice services, or telemetry. After the file loads, practice makes no network requests. GitHub Pages itself logs visitor IP addresses for security, and device/browser management may have separate logging.
+No names, accounts, ads, analytics, microphone, recording, cookies, browser storage, external scripts, or student-data uploads. Activity exists only in page memory and clears on reload or close. Practice makes no network requests after loading. GitHub Pages itself logs visitor IP addresses for security; browser or device management may separately log activity. For practice without hosting requests, use the downloaded offline file.
 
 ## Teaching scope
 
-Match practice to skills already taught. Short-vowel lessons assume the child knows consonant letter sounds. Synthetic audio reads whole words, not isolated phonemes. The app cannot assess oral reading. Activity counts are not diagnostic or mastery scores. Story passages include preview words and are not aligned to a specific programme's controlled decodable sequence. This app has not been evaluated as a reading intervention.
+Match practice to taught skills. Synthetic audio reads whole words, not isolated phonemes. Oral reading and fluency are not assessed. Activity counts are not diagnostic or mastery scores. Passage vocabulary is not aligned to a specific controlled decodable sequence. This is not yet a complete Grade 2–4 curriculum or evidence of equivalent outcomes to a commercial intervention.
 
-Check pronunciation, vocabulary, lesson order, and suitability before classroom use. Teacher notes and audio credits are inside Grown-ups. All lessons and stories are original; no Lexia content, branding, or assets are included. Recordings were generated locally with CMU Flite's SLT voice.
+Teachers should review pronunciation, vocabulary, lesson sequence and suitability. All lesson text and stories are original. No Lexia or UFLI proprietary lessons, branding, or assets are included. Audio was generated locally with CMU Flite's SLT voice; credits are in Grown-ups.
