@@ -1,0 +1,1666 @@
+{
+  "lessons": [
+    {
+      "id": "rhyme",
+      "name": "Words that rhyme",
+      "stage": "Sound games",
+      "tag": "Sound games",
+      "pattern": "Listen",
+      "examples": [
+        "cat",
+        "hat",
+        "dog"
+      ],
+      "words": [
+        "cat",
+        "hat",
+        "dog"
+      ],
+      "intro": "Rhyming words have the same ending sound. Listen to cat and hat. Their beginning sounds are different, but their endings match.",
+      "rule": "Rhyming words have the same ending sound. Listen to cat and hat. Their beginning sounds are different, but their endings match.",
+      "kind": "quiz",
+      "soundOnly": true,
+      "items": [
+        {
+          "prompt": "Which word rhymes with cat?",
+          "choices": [
+            "hat",
+            "dog",
+            "sun"
+          ],
+          "correct": 0,
+          "explanation": "Cat and hat have the same ending sound."
+        },
+        {
+          "prompt": "Which word rhymes with pin?",
+          "choices": [
+            "fin",
+            "cup",
+            "bed"
+          ],
+          "correct": 0,
+          "explanation": "Pin and fin have the same ending sound."
+        },
+        {
+          "prompt": "Which word rhymes with log?",
+          "choices": [
+            "bag",
+            "dog",
+            "sit"
+          ],
+          "correct": 1,
+          "explanation": "Log and dog have the same ending sound."
+        },
+        {
+          "prompt": "Which word rhymes with sun?",
+          "choices": [
+            "map",
+            "hen",
+            "run"
+          ],
+          "correct": 2,
+          "explanation": "Sun and run have the same ending sound."
+        },
+        {
+          "prompt": "Which word rhymes with bed?",
+          "choices": [
+            "red",
+            "cat",
+            "hop"
+          ],
+          "correct": 0,
+          "explanation": "Bed and red have the same ending sound."
+        },
+        {
+          "prompt": "Which word rhymes with cake?",
+          "choices": [
+            "bike",
+            "lake",
+            "moon"
+          ],
+          "correct": 1,
+          "explanation": "Cake and lake have the same ending sound."
+        }
+      ]
+    },
+    {
+      "id": "start-sound",
+      "name": "Same starting sound",
+      "stage": "Sound games",
+      "tag": "Sound games",
+      "pattern": "Listen",
+      "examples": [
+        "map",
+        "moon",
+        "sun"
+      ],
+      "words": [
+        "map",
+        "moon",
+        "sun"
+      ],
+      "intro": "Listen to map and moon. They start with the same sound. Listen to each choice and find another word with the same beginning sound.",
+      "rule": "Listen to map and moon. They start with the same sound. Listen to each choice and find another word with the same beginning sound.",
+      "kind": "quiz",
+      "soundOnly": true,
+      "items": [
+        {
+          "prompt": "Which word starts with the same sound as map?",
+          "choices": [
+            "moon",
+            "sun",
+            "fish"
+          ],
+          "correct": 0,
+          "explanation": "Map and moon begin with the same sound."
+        },
+        {
+          "prompt": "Which word starts with the same sound as sun?",
+          "choices": [
+            "cat",
+            "sock",
+            "dog"
+          ],
+          "correct": 1,
+          "explanation": "Sun and sock begin with the same sound."
+        },
+        {
+          "prompt": "Which word starts with the same sound as fish?",
+          "choices": [
+            "hat",
+            "pen",
+            "fan"
+          ],
+          "correct": 2,
+          "explanation": "Fish and fan begin with the same sound."
+        },
+        {
+          "prompt": "Which word starts with the same sound as dog?",
+          "choices": [
+            "duck",
+            "map",
+            "cat"
+          ],
+          "correct": 0,
+          "explanation": "Dog and duck begin with the same sound."
+        },
+        {
+          "prompt": "Which word starts with the same sound as cat?",
+          "choices": [
+            "sun",
+            "cup",
+            "moon"
+          ],
+          "correct": 1,
+          "explanation": "Cat and cup begin with the same sound."
+        },
+        {
+          "prompt": "Which word starts with the same sound as ship?",
+          "choices": [
+            "sock",
+            "chip",
+            "shop"
+          ],
+          "correct": 2,
+          "explanation": "Ship and shop begin with the same sound. Sock and chip start differently."
+        }
+      ]
+    },
+    {
+      "id": "syllables",
+      "name": "Word beats",
+      "stage": "Sound games",
+      "tag": "Sound games",
+      "pattern": "Clap",
+      "examples": [
+        "sun",
+        "rabbit",
+        "banana"
+      ],
+      "words": [
+        "sun",
+        "rabbit",
+        "banana"
+      ],
+      "intro": "A syllable is a beat in a spoken word. Sun has one beat. Rabbit has two. Banana has three. Say a word slowly and clap its beats.",
+      "rule": "A syllable is a beat in a spoken word. Sun has one beat. Rabbit has two. Banana has three. Say a word slowly and clap its beats.",
+      "kind": "quiz",
+      "soundOnly": true,
+      "items": [
+        {
+          "prompt": "Say sun. How many syllables do you hear?",
+          "choices": [
+            "one",
+            "two",
+            "three"
+          ],
+          "correct": 0,
+          "explanation": "Sun has one syllable."
+        },
+        {
+          "prompt": "Say rabbit. How many syllables do you hear?",
+          "choices": [
+            "one",
+            "two",
+            "three"
+          ],
+          "correct": 1,
+          "explanation": "Rabbit has two syllables: rab, bit."
+        },
+        {
+          "prompt": "Say banana. How many syllables do you hear?",
+          "choices": [
+            "one",
+            "two",
+            "three"
+          ],
+          "correct": 2,
+          "explanation": "Banana has three syllables: ba, na, na."
+        },
+        {
+          "prompt": "Say sunset. How many syllables do you hear?",
+          "choices": [
+            "one",
+            "two",
+            "three"
+          ],
+          "correct": 1,
+          "explanation": "Sunset has two syllables: sun, set."
+        },
+        {
+          "prompt": "Say picnic. How many syllables do you hear?",
+          "choices": [
+            "one",
+            "two",
+            "three"
+          ],
+          "correct": 1,
+          "explanation": "Picnic has two syllables: pic, nic."
+        },
+        {
+          "prompt": "Say elephant. How many syllables do you hear?",
+          "choices": [
+            "one",
+            "two",
+            "three"
+          ],
+          "correct": 2,
+          "explanation": "Elephant has three syllables: el, e, phant."
+        }
+      ]
+    },
+    {
+      "id": "short-a",
+      "name": "Short a",
+      "tag": "Start here",
+      "pattern": "a",
+      "examples": [
+        "cat",
+        "map",
+        "sat"
+      ],
+      "words": [
+        "cat",
+        "map",
+        "sat",
+        "tap",
+        "pan",
+        "bag"
+      ],
+      "intro": "Let's practise short a words, like cat, map, and sat. Tap each word to hear it. Read it aloud. Then try the practice.",
+      "stage": "First words",
+      "rule": "Let's practise short a words, like cat, map, and sat."
+    },
+    {
+      "id": "short-i",
+      "name": "Short i",
+      "tag": "Short vowels",
+      "pattern": "i",
+      "examples": [
+        "pin",
+        "sit",
+        "pig"
+      ],
+      "words": [
+        "pin",
+        "sit",
+        "lip",
+        "pig",
+        "fin",
+        "dig"
+      ],
+      "intro": "Let's practise short i words, like pin, sit, and pig. Tap each word to hear it. Read it aloud. Then try the practice.",
+      "stage": "First words",
+      "rule": "Let's practise short i words, like pin, sit, and pig."
+    },
+    {
+      "id": "short-o",
+      "name": "Short o",
+      "tag": "Short vowels",
+      "pattern": "o",
+      "examples": [
+        "dog",
+        "log",
+        "hop"
+      ],
+      "words": [
+        "dog",
+        "log",
+        "pot",
+        "top",
+        "mop",
+        "hop"
+      ],
+      "intro": "Let's practise short o words, like dog, log, and hop. Tap each word to hear it. Read it aloud. Then try the practice.",
+      "stage": "First words",
+      "rule": "Let's practise short o words, like dog, log, and hop."
+    },
+    {
+      "id": "short-u",
+      "name": "Short u",
+      "tag": "Short vowels",
+      "pattern": "u",
+      "examples": [
+        "sun",
+        "cup",
+        "bug"
+      ],
+      "words": [
+        "sun",
+        "cup",
+        "bus",
+        "mud",
+        "rug",
+        "bug"
+      ],
+      "intro": "Let's practise short u words, like sun, cup, and bug. Tap each word to hear it. Read it aloud. Then try the practice.",
+      "stage": "First words",
+      "rule": "Let's practise short u words, like sun, cup, and bug."
+    },
+    {
+      "id": "short-e",
+      "name": "Short e",
+      "tag": "Short vowels",
+      "pattern": "e",
+      "examples": [
+        "hen",
+        "bed",
+        "ten"
+      ],
+      "words": [
+        "hen",
+        "pen",
+        "bed",
+        "red",
+        "ten",
+        "leg"
+      ],
+      "intro": "Let's practise short e words, like hen, bed, and ten. Tap each word to hear it. Read it aloud. Then try the practice.",
+      "stage": "First words",
+      "rule": "Let's practise short e words, like hen, bed, and ten."
+    },
+    {
+      "id": "vowel-mix",
+      "name": "Mix the vowels",
+      "tag": "Put it together",
+      "pattern": "a i o u e",
+      "examples": [
+        "cat",
+        "sit",
+        "dog"
+      ],
+      "words": [
+        "cat",
+        "sit",
+        "dog",
+        "sun",
+        "hen",
+        "map",
+        "pin",
+        "hop",
+        "cup",
+        "bed",
+        "tap",
+        "pig"
+      ],
+      "intro": "Now mix the short vowels. Look closely at the middle letter. Cat. Sit. Dog. Sun. Hen. Tap a word to hear it, then read it aloud.",
+      "stage": "First words",
+      "rule": "Now mix the short vowels. Look closely at the middle letter. Cat. Sit. Dog. Sun. Hen."
+    },
+    {
+      "id": "sh",
+      "name": "The sh team",
+      "tag": "Two letters, one sound",
+      "pattern": "sh",
+      "examples": [
+        "ship",
+        "shop",
+        "fish"
+      ],
+      "words": [
+        "ship",
+        "shop",
+        "fish",
+        "dish",
+        "shed",
+        "shut"
+      ],
+      "intro": "In these words, s and h work together to spell one sound. Ship. Shop. Fish. Sometimes the team is at the start. Sometimes it is at the end. Tap a word to hear it.",
+      "stage": "Letter teams",
+      "rule": "In these words, s and h work together to spell one sound. Ship. Shop. Fish. Sometimes the team is at the start. Sometimes it is at the end."
+    },
+    {
+      "id": "ch",
+      "name": "The ch team",
+      "tag": "Two letters, one sound",
+      "pattern": "ch",
+      "examples": [
+        "chip",
+        "chop",
+        "chin"
+      ],
+      "words": [
+        "chip",
+        "chop",
+        "chin",
+        "chat",
+        "chug",
+        "much"
+      ],
+      "intro": "In these words, c and h work together to spell one sound. Chip. Chop. Chin. Much. Tap a word to hear it. Then read the whole word aloud.",
+      "stage": "Letter teams",
+      "rule": "In these words, c and h work together to spell one sound. Chip. Chop. Chin. Much."
+    },
+    {
+      "id": "th-ck",
+      "name": "More letter teams",
+      "tag": "th and ck",
+      "pattern": "th · ck",
+      "examples": [
+        "thin",
+        "duck",
+        "sock"
+      ],
+      "words": [
+        "thin",
+        "thud",
+        "moth",
+        "math",
+        "duck",
+        "sock",
+        "back",
+        "neck"
+      ],
+      "intro": "Meet two more letter teams. T and h work together in thin and moth. C and k work together at the end of duck and sock. Each team spells one sound in these words. Tap a word to hear it.",
+      "stage": "Letter teams",
+      "rule": "Meet two more letter teams. T and h work together in thin and moth. C and k work together at the end of duck and sock. Each team spells one sound in these words."
+    },
+    {
+      "id": "start-blends",
+      "name": "Blends at the start",
+      "tag": "Keep each sound",
+      "pattern": "st · cl · fr",
+      "examples": [
+        "stop",
+        "clap",
+        "frog"
+      ],
+      "words": [
+        "stop",
+        "spin",
+        "clap",
+        "flag",
+        "frog",
+        "drum",
+        "slip",
+        "grin"
+      ],
+      "intro": "In a blend, each letter keeps its sound. Stop. Clap. Frog. Read every letter, then put the sounds together. Tap a word to hear it.",
+      "stage": "Letter teams",
+      "rule": "In a blend, each letter keeps its sound. Stop. Clap. Frog. Read every letter, then put the sounds together."
+    },
+    {
+      "id": "end-blends",
+      "name": "Blends at the end",
+      "tag": "Read to the end",
+      "pattern": "mp · nd · nt",
+      "examples": [
+        "lamp",
+        "hand",
+        "tent"
+      ],
+      "words": [
+        "lamp",
+        "hand",
+        "sand",
+        "tent",
+        "jump",
+        "pond",
+        "bend",
+        "nest"
+      ],
+      "intro": "Now look for blends at the end. Lamp. Hand. Tent. Read all the way to the last letter. Each letter in a blend keeps its sound. Tap a word to hear it.",
+      "stage": "Letter teams",
+      "rule": "Now look for blends at the end. Lamp. Hand. Tent. Read all the way to the last letter. Each letter in a blend keeps its sound."
+    },
+    {
+      "id": "a-e",
+      "name": "Silent e: long a",
+      "stage": "Long vowels",
+      "tag": "Long vowels",
+      "pattern": "a_e",
+      "examples": [
+        "cake",
+        "name",
+        "game"
+      ],
+      "words": [
+        "cake",
+        "name",
+        "game",
+        "late",
+        "gate",
+        "same"
+      ],
+      "intro": "In these words, the last e is silent. The a has its long sound, like its letter name. Compare cap and cape. Tap a word to hear it. Read the whole word aloud.",
+      "rule": "In these words, the last e is silent. The a has its long sound, like its letter name. Compare cap and cape."
+    },
+    {
+      "id": "i-e",
+      "name": "Silent e: long i",
+      "stage": "Long vowels",
+      "tag": "Long vowels",
+      "pattern": "i_e",
+      "examples": [
+        "bike",
+        "time",
+        "five"
+      ],
+      "words": [
+        "bike",
+        "time",
+        "five",
+        "nine",
+        "ride",
+        "side"
+      ],
+      "intro": "In these words, the last e is silent. The i has its long sound, like its letter name. Compare pin and pine. Tap a word to hear it. Read the whole word aloud.",
+      "rule": "In these words, the last e is silent. The i has its long sound, like its letter name. Compare pin and pine."
+    },
+    {
+      "id": "o-e",
+      "name": "Silent e: long o",
+      "stage": "Long vowels",
+      "tag": "Long vowels",
+      "pattern": "o_e",
+      "examples": [
+        "home",
+        "hope",
+        "rope"
+      ],
+      "words": [
+        "home",
+        "hope",
+        "rope",
+        "note",
+        "bone",
+        "cone"
+      ],
+      "intro": "In these words, the last e is silent. The o has its long sound, like its letter name. Compare hop and hope. Tap a word to hear it. Read the whole word aloud.",
+      "rule": "In these words, the last e is silent. The o has its long sound, like its letter name. Compare hop and hope."
+    },
+    {
+      "id": "u-e",
+      "name": "Silent e: long u",
+      "stage": "Long vowels",
+      "tag": "Long vowels",
+      "pattern": "u_e",
+      "examples": [
+        "cube",
+        "cute",
+        "tube"
+      ],
+      "words": [
+        "cube",
+        "cute",
+        "tube",
+        "tune",
+        "mule",
+        "flute"
+      ],
+      "intro": "In these words, the last e is silent. Listen to cube and flute. Long u can sound like its letter name or like the vowel in flute. Tap a word to hear it. Read the whole word aloud.",
+      "rule": "In these words, the last e is silent. Listen to cube and flute. Long u can sound like its letter name or like the vowel in flute."
+    },
+    {
+      "id": "ai-ay",
+      "name": "Long a teams",
+      "stage": "Long vowels",
+      "tag": "Long vowels",
+      "pattern": "ai · ay",
+      "examples": [
+        "rain",
+        "mail",
+        "tail"
+      ],
+      "words": [
+        "rain",
+        "mail",
+        "tail",
+        "train",
+        "play",
+        "stay"
+      ],
+      "intro": "In these words, a i and a y spell long a. The a y team is at the end of play and stay. Tap a word to hear it. Read the whole word aloud.",
+      "rule": "In these words, a i and a y spell long a. The a y team is at the end of play and stay."
+    },
+    {
+      "id": "ee-ea",
+      "name": "Long e teams",
+      "stage": "Long vowels",
+      "tag": "Long vowels",
+      "pattern": "ee · ea",
+      "examples": [
+        "seed",
+        "feet",
+        "tree"
+      ],
+      "words": [
+        "seed",
+        "feet",
+        "tree",
+        "green",
+        "team",
+        "seat",
+        "leaf",
+        "beach"
+      ],
+      "intro": "In these words, e e and e a spell long e. The e a team can spell other sounds in other words. Today we practise team and seat. Tap a word to hear it. Read the whole word aloud.",
+      "rule": "In these words, e e and e a spell long e. The e a team can spell other sounds in other words. Today we practise team and seat."
+    },
+    {
+      "id": "oa-ow",
+      "name": "Long o teams",
+      "stage": "Long vowels",
+      "tag": "Long vowels",
+      "pattern": "oa · ow",
+      "examples": [
+        "boat",
+        "coat",
+        "road"
+      ],
+      "words": [
+        "boat",
+        "coat",
+        "road",
+        "soap",
+        "snow",
+        "grow",
+        "show",
+        "slow"
+      ],
+      "intro": "In these words, o a and o w spell long o. The o w team can have another sound in other words. Here we practise snow and grow. Tap a word to hear it. Read the whole word aloud.",
+      "rule": "In these words, o a and o w spell long o. The o w team can have another sound in other words. Here we practise snow and grow."
+    },
+    {
+      "id": "oo-long",
+      "name": "The oo in moon",
+      "stage": "Long vowels",
+      "tag": "Long vowels",
+      "pattern": "oo",
+      "examples": [
+        "moon",
+        "food",
+        "boot"
+      ],
+      "words": [
+        "moon",
+        "food",
+        "boot",
+        "room",
+        "pool",
+        "spoon"
+      ],
+      "intro": "Listen to moon and food. In these words, the o o team spells the same vowel sound. Read each whole word. Tap a word to hear it. Read the whole word aloud.",
+      "rule": "Listen to moon and food. In these words, the o o team spells the same vowel sound. Read each whole word."
+    },
+    {
+      "id": "oo-short",
+      "name": "The oo in book",
+      "stage": "Long vowels",
+      "tag": "Long vowels",
+      "pattern": "oo",
+      "examples": [
+        "book",
+        "look",
+        "cook"
+      ],
+      "words": [
+        "book",
+        "look",
+        "cook",
+        "good",
+        "wood",
+        "foot"
+      ],
+      "intro": "Listen to book and look. The o o team has a different sound from moon. All the words in this lesson use the sound in book. Tap a word to hear it. Read the whole word aloud.",
+      "rule": "Listen to book and look. The o o team has a different sound from moon. All the words in this lesson use the sound in book."
+    },
+    {
+      "id": "ar",
+      "name": "The ar team",
+      "stage": "More patterns",
+      "tag": "More patterns",
+      "pattern": "ar",
+      "examples": [
+        "car",
+        "far",
+        "park"
+      ],
+      "words": [
+        "car",
+        "far",
+        "park",
+        "star",
+        "farm",
+        "hard"
+      ],
+      "intro": "The letter r changes the vowel sound in these words. Listen to car, park, and star. Look for the a r team. Tap a word to hear it. Read the whole word aloud.",
+      "rule": "The letter r changes the vowel sound in these words. Listen to car, park, and star. Look for the a r team."
+    },
+    {
+      "id": "or",
+      "name": "The or team",
+      "stage": "More patterns",
+      "tag": "More patterns",
+      "pattern": "or",
+      "examples": [
+        "fork",
+        "corn",
+        "storm"
+      ],
+      "words": [
+        "fork",
+        "corn",
+        "storm",
+        "short",
+        "sport",
+        "north"
+      ],
+      "intro": "The letter r changes the vowel sound in these words. Listen to fork, corn, and storm. Look for the o r team. Tap a word to hear it. Read the whole word aloud.",
+      "rule": "The letter r changes the vowel sound in these words. Listen to fork, corn, and storm. Look for the o r team."
+    },
+    {
+      "id": "er-ir-ur",
+      "name": "Three ways to spell it",
+      "stage": "More patterns",
+      "tag": "More patterns",
+      "pattern": "er · ir · ur",
+      "examples": [
+        "her",
+        "fern",
+        "bird"
+      ],
+      "words": [
+        "her",
+        "fern",
+        "bird",
+        "girl",
+        "turn",
+        "hurt",
+        "fur",
+        "burn"
+      ],
+      "intro": "Listen to her, bird, and turn. In these words, e r, i r, and u r spell the same vowel sound in this voice. Look closely at each spelling. Tap a word to hear it. Read the whole word aloud.",
+      "rule": "Listen to her, bird, and turn. In these words, e r, i r, and u r spell the same vowel sound in this voice. Look closely at each spelling."
+    },
+    {
+      "id": "oi-oy",
+      "name": "The oi and oy teams",
+      "stage": "More patterns",
+      "tag": "More patterns",
+      "pattern": "oi · oy",
+      "examples": [
+        "coin",
+        "join",
+        "soil"
+      ],
+      "words": [
+        "coin",
+        "join",
+        "soil",
+        "point",
+        "toy",
+        "boy",
+        "joy",
+        "enjoy"
+      ],
+      "intro": "Listen to coin and toy. The vowel sound moves as you say it. O i and o y can spell that sound. O y is at the end of toy and boy. Tap a word to hear it. Read the whole word aloud.",
+      "rule": "Listen to coin and toy. The vowel sound moves as you say it. O i and o y can spell that sound. O y is at the end of toy and boy."
+    },
+    {
+      "id": "ou-ow",
+      "name": "The sound in cow",
+      "stage": "More patterns",
+      "tag": "More patterns",
+      "pattern": "ou · ow",
+      "examples": [
+        "out",
+        "shout",
+        "cloud"
+      ],
+      "words": [
+        "out",
+        "shout",
+        "cloud",
+        "mouth",
+        "cow",
+        "town",
+        "brown",
+        "down"
+      ],
+      "intro": "Listen to out and cow. In these words, o u and o w spell the same vowel sound. These spellings can have other sounds in other words. Tap a word to hear it. Read the whole word aloud.",
+      "rule": "Listen to out and cow. In these words, o u and o w spell the same vowel sound. These spellings can have other sounds in other words."
+    },
+    {
+      "id": "soft-c",
+      "name": "The c in city",
+      "stage": "More patterns",
+      "tag": "More patterns",
+      "pattern": "c",
+      "examples": [
+        "city",
+        "cent",
+        "cell"
+      ],
+      "words": [
+        "city",
+        "cent",
+        "cell",
+        "ice",
+        "face",
+        "race"
+      ],
+      "intro": "In these words, c sounds like s. This often happens before e, i, or y. Listen to city and face. Read each whole word. Tap a word to hear it. Read the whole word aloud.",
+      "rule": "In these words, c sounds like s. This often happens before e, i, or y. Listen to city and face. Read each whole word."
+    },
+    {
+      "id": "soft-g",
+      "name": "The g in gem",
+      "stage": "More patterns",
+      "tag": "More patterns",
+      "pattern": "g",
+      "examples": [
+        "gem",
+        "germ",
+        "giant"
+      ],
+      "words": [
+        "gem",
+        "germ",
+        "giant",
+        "magic",
+        "page",
+        "cage"
+      ],
+      "intro": "In these words, g sounds like j. It often has this sound before e, i, or y, but there are exceptions. Listen to gem and page. Tap a word to hear it. Read the whole word aloud.",
+      "rule": "In these words, g sounds like j. It often has this sound before e, i, or y, but there are exceptions. Listen to gem and page."
+    },
+    {
+      "id": "ing",
+      "name": "Add ing",
+      "stage": "Word parts",
+      "tag": "Word parts",
+      "pattern": "ing",
+      "examples": [
+        "jumping",
+        "helping",
+        "camping"
+      ],
+      "words": [
+        "jumping",
+        "helping",
+        "camping",
+        "looking",
+        "playing",
+        "reading"
+      ],
+      "intro": "An ending can add meaning. Jumping means doing the action of jump. These words add i n g without changing the base word. Look for the base and the ending. Tap a word to hear it. Read the whole word aloud.",
+      "rule": "An ending can add meaning. Jumping means doing the action of jump. These words add i n g without changing the base word. Look for the base and the ending."
+    },
+    {
+      "id": "plurals",
+      "name": "More than one",
+      "stage": "Word parts",
+      "tag": "Word parts",
+      "pattern": "s · es",
+      "examples": [
+        "cats",
+        "dogs",
+        "cups"
+      ],
+      "words": [
+        "cats",
+        "dogs",
+        "cups",
+        "pens",
+        "boxes",
+        "dishes",
+        "buses",
+        "wishes"
+      ],
+      "intro": "These words name more than one. We often add s. After endings like x or sh, we add e s. Listen to cat and cats, box and boxes. Tap a word to hear it. Read the whole word aloud.",
+      "rule": "These words name more than one. We often add s. After endings like x or sh, we add e s. Listen to cat and cats, box and boxes."
+    },
+    {
+      "id": "past-ed",
+      "name": "It already happened",
+      "stage": "Word parts",
+      "tag": "Word parts",
+      "pattern": "ed",
+      "examples": [
+        "jumped",
+        "helped",
+        "played"
+      ],
+      "words": [
+        "jumped",
+        "helped",
+        "played",
+        "cleaned",
+        "wanted",
+        "landed"
+      ],
+      "intro": "The ending e d can show that something already happened. It has different sounds in jumped, played, and wanted. The spelling stays e d. Tap a word to hear it. Read the whole word aloud.",
+      "rule": "The ending e d can show that something already happened. It has different sounds in jumped, played, and wanted. The spelling stays e d."
+    },
+    {
+      "id": "compound",
+      "name": "Two words make one",
+      "stage": "Word parts",
+      "tag": "Word parts",
+      "pattern": "word + word",
+      "examples": [
+        "sunset",
+        "bathtub",
+        "bedtime"
+      ],
+      "words": [
+        "sunset",
+        "bathtub",
+        "bedtime",
+        "sandbox",
+        "raincoat",
+        "lunchbox"
+      ],
+      "intro": "A compound word joins two words. Sun and set make sunset. Rain and coat make raincoat. Find the two words, then read the whole word. Tap a word to hear it. Read the whole word aloud.",
+      "rule": "A compound word joins two words. Sun and set make sunset. Rain and coat make raincoat. Find the two words, then read the whole word."
+    },
+    {
+      "id": "prefixes",
+      "name": "Beginnings with meaning",
+      "stage": "Word parts",
+      "tag": "Word parts",
+      "pattern": "un · re",
+      "examples": [
+        "unfair",
+        "redo",
+        "replay"
+      ],
+      "words": [
+        "unfair",
+        "redo",
+        "replay"
+      ],
+      "intro": "A prefix goes at the start of a word and changes its meaning. Un can mean not. Re can mean again. Listen to unfair and replay.",
+      "rule": "A prefix goes at the start of a word and changes its meaning. Un can mean not. Re can mean again. Listen to unfair and replay.",
+      "kind": "quiz",
+      "soundOnly": false,
+      "items": [
+        {
+          "prompt": "What does unfair mean?",
+          "choices": [
+            "not fair",
+            "very fair",
+            "fair again"
+          ],
+          "correct": 0,
+          "explanation": "Un means not. Unfair means not fair."
+        },
+        {
+          "prompt": "What does replay mean?",
+          "choices": [
+            "play again",
+            "stop playing",
+            "play badly"
+          ],
+          "correct": 0,
+          "explanation": "Re means again. Replay means play again."
+        },
+        {
+          "prompt": "What does reread mean?",
+          "choices": [
+            "read quickly",
+            "read again",
+            "not read"
+          ],
+          "correct": 1,
+          "explanation": "Reread means read again."
+        },
+        {
+          "prompt": "What does unsafe mean?",
+          "choices": [
+            "safe again",
+            "very safe",
+            "not safe"
+          ],
+          "correct": 2,
+          "explanation": "Unsafe means not safe."
+        },
+        {
+          "prompt": "What does refill mean?",
+          "choices": [
+            "fill again",
+            "not fill",
+            "empty it"
+          ],
+          "correct": 0,
+          "explanation": "Refill means fill again."
+        },
+        {
+          "prompt": "What does unkind mean?",
+          "choices": [
+            "kind again",
+            "not kind",
+            "very kind"
+          ],
+          "correct": 1,
+          "explanation": "Unkind means not kind."
+        }
+      ]
+    },
+    {
+      "id": "suffixes",
+      "name": "Endings with meaning",
+      "stage": "Word parts",
+      "tag": "Word parts",
+      "pattern": "ful · less",
+      "examples": [
+        "helpful",
+        "careless",
+        "fearless"
+      ],
+      "words": [
+        "helpful",
+        "careless",
+        "fearless"
+      ],
+      "intro": "A suffix goes at the end of a word. Ful can mean full of or having. Less can mean without. Helpful means giving help. Fearless means without fear.",
+      "rule": "A suffix goes at the end of a word. Ful can mean full of or having. Less can mean without. Helpful means giving help. Fearless means without fear.",
+      "kind": "quiz",
+      "soundOnly": false,
+      "items": [
+        {
+          "prompt": "What does helpful mean?",
+          "choices": [
+            "giving help",
+            "needing help",
+            "without help"
+          ],
+          "correct": 0,
+          "explanation": "A helpful person gives help."
+        },
+        {
+          "prompt": "What does fearless mean?",
+          "choices": [
+            "full of fear",
+            "without fear",
+            "fear again"
+          ],
+          "correct": 1,
+          "explanation": "Less means without. Fearless means without fear."
+        },
+        {
+          "prompt": "What does colourful mean?",
+          "choices": [
+            "without colour",
+            "one colour",
+            "having lots of colour"
+          ],
+          "correct": 2,
+          "explanation": "Colourful means having lots of colour."
+        },
+        {
+          "prompt": "What does careless mean?",
+          "choices": [
+            "not taking care",
+            "very careful",
+            "care again"
+          ],
+          "correct": 0,
+          "explanation": "Careless means not taking care."
+        },
+        {
+          "prompt": "What does hopeful mean?",
+          "choices": [
+            "without hope",
+            "having hope",
+            "hope again"
+          ],
+          "correct": 1,
+          "explanation": "Hopeful means having hope."
+        },
+        {
+          "prompt": "What does powerless mean?",
+          "choices": [
+            "full of power",
+            "power again",
+            "without power"
+          ],
+          "correct": 2,
+          "explanation": "Powerless means without power."
+        }
+      ]
+    },
+    {
+      "id": "vocabulary",
+      "name": "Words in a sentence",
+      "stage": "Meaning & stories",
+      "tag": "Meaning & stories",
+      "pattern": "Meaning",
+      "examples": [
+        "tiny",
+        "huge",
+        "quiet"
+      ],
+      "words": [
+        "tiny",
+        "huge",
+        "quiet"
+      ],
+      "intro": "A sentence can help you work out a word. Listen for clues around a word you do not know. Try a meaning and check that the sentence still makes sense.",
+      "rule": "A sentence can help you work out a word. Listen for clues around a word you do not know. Try a meaning and check that the sentence still makes sense.",
+      "kind": "quiz",
+      "soundOnly": false,
+      "items": [
+        {
+          "prompt": "The tiny kitten fit in one hand. What does tiny mean?",
+          "choices": [
+            "very small",
+            "very loud",
+            "very old"
+          ],
+          "correct": 0,
+          "explanation": "Fitting in one hand is a clue that tiny means very small."
+        },
+        {
+          "prompt": "The huge box would not fit through the door. What does huge mean?",
+          "choices": [
+            "very small",
+            "very big",
+            "very soft"
+          ],
+          "correct": 1,
+          "explanation": "Not fitting through the door is a clue that huge means very big."
+        },
+        {
+          "prompt": "We whispered in the quiet room. What does quiet mean?",
+          "choices": [
+            "full of noise",
+            "bright",
+            "not noisy"
+          ],
+          "correct": 2,
+          "explanation": "Whispering is a clue. Quiet means not noisy."
+        },
+        {
+          "prompt": "The damp socks felt wet. What does damp mean?",
+          "choices": [
+            "slightly wet",
+            "very warm",
+            "completely dry"
+          ],
+          "correct": 0,
+          "explanation": "Wet is a clue. Damp means slightly wet."
+        },
+        {
+          "prompt": "Mia was thrilled when her friend arrived. She smiled and jumped. What does thrilled mean?",
+          "choices": [
+            "angry",
+            "very excited",
+            "sleepy"
+          ],
+          "correct": 1,
+          "explanation": "Smiling and jumping are clues that thrilled means very excited."
+        },
+        {
+          "prompt": "The path was narrow. We had to walk in one line. What does narrow mean?",
+          "choices": [
+            "very long",
+            "very bright",
+            "not wide"
+          ],
+          "correct": 2,
+          "explanation": "Walking in one line is a clue that narrow means not wide."
+        }
+      ]
+    },
+    {
+      "id": "stories",
+      "name": "Little stories",
+      "stage": "Meaning & stories",
+      "tag": "Meaning & stories",
+      "pattern": "Read",
+      "examples": [
+        "the",
+        "a",
+        "has"
+      ],
+      "words": [
+        "the",
+        "a",
+        "has",
+        "is",
+        "can",
+        "and"
+      ],
+      "intro": "Read useful words with your grown-up first. Read each story twice, then answer the questions. You can hear a model reading if you need help. Tap a word to hear it. Read the whole word aloud.",
+      "rule": "Read useful words with your grown-up first. Read each story twice, then answer the questions. You can hear a model reading if you need help.",
+      "kind": "stories"
+    }
+  ],
+  "stories": [
+    {
+      "title": "Sam and the cat",
+      "lines": [
+        "Sam has a cat.",
+        "The cat is on a mat.",
+        "Sam can pat the cat.",
+        "The cat can nap."
+      ],
+      "preview": "Read together first: Sam, has, a, the, is, on.",
+      "questions": [
+        {
+          "q": "Where is the cat?",
+          "answers": [
+            "On a mat.",
+            "In a van.",
+            "On a log."
+          ],
+          "correct": 0
+        },
+        {
+          "q": "What can Sam do?",
+          "answers": [
+            "Dig.",
+            "Pat the cat.",
+            "Hop."
+          ],
+          "correct": 1
+        },
+        {
+          "q": "What can the cat do?",
+          "answers": [
+            "Run to a bus.",
+            "Get wet.",
+            "Nap."
+          ],
+          "correct": 2
+        }
+      ]
+    },
+    {
+      "title": "The red cup",
+      "lines": [
+        "Ben has a red cup.",
+        "The cup is in a bag.",
+        "Ben can get the cup.",
+        "Ben can sip."
+      ],
+      "preview": "Read together first: Ben, has, a, the, is, in.",
+      "questions": [
+        {
+          "q": "What is red?",
+          "answers": [
+            "The bag.",
+            "The cup.",
+            "Ben."
+          ],
+          "correct": 1
+        },
+        {
+          "q": "Where is the cup?",
+          "answers": [
+            "On a mat.",
+            "In a pot.",
+            "In a bag."
+          ],
+          "correct": 2
+        },
+        {
+          "q": "What can Ben do?",
+          "answers": [
+            "Sip.",
+            "Dig.",
+            "Nap."
+          ],
+          "correct": 0
+        }
+      ]
+    },
+    {
+      "title": "At the shop",
+      "lines": [
+        "Chad is at the shop.",
+        "The shop has a red sock.",
+        "Chad can get the sock.",
+        "The sock is in a bag."
+      ],
+      "preview": "Read together first: Chad, is, at, the, has, a, in.",
+      "questions": [
+        {
+          "q": "Where is Chad?",
+          "answers": [
+            "At the shop.",
+            "At a pond.",
+            "On a ship."
+          ],
+          "correct": 0
+        },
+        {
+          "q": "What can Chad get?",
+          "answers": [
+            "A duck.",
+            "A red sock.",
+            "A cup."
+          ],
+          "correct": 1
+        },
+        {
+          "q": "Where is the sock at the end?",
+          "answers": [
+            "On a bed.",
+            "In a van.",
+            "In a bag."
+          ],
+          "correct": 2
+        }
+      ]
+    },
+    {
+      "title": "The duck",
+      "lines": [
+        "A duck is in a pond.",
+        "The duck can dip.",
+        "A fish is in the pond.",
+        "The fish can dash."
+      ],
+      "preview": "Read together first: a, is, in, the, can. Pond has a blend at the end.",
+      "questions": [
+        {
+          "q": "Where is the duck?",
+          "answers": [
+            "In a shop.",
+            "In a pond.",
+            "In a bag."
+          ],
+          "correct": 1
+        },
+        {
+          "q": "What can the duck do?",
+          "answers": [
+            "Chop.",
+            "Shop.",
+            "Dip."
+          ],
+          "correct": 2
+        },
+        {
+          "q": "What else is in the pond?",
+          "answers": [
+            "A fish.",
+            "A cat.",
+            "A hen."
+          ],
+          "correct": 0
+        }
+      ]
+    },
+    {
+      "title": "The flag",
+      "lines": [
+        "Glen has a flag.",
+        "The flag is in a tent.",
+        "Glen can grab the flag.",
+        "Glen can run with it."
+      ],
+      "preview": "Read together first: Glen, has, a, the, is, in, can, with, it.",
+      "questions": [
+        {
+          "q": "What does Glen have?",
+          "answers": [
+            "A drum.",
+            "A lamp.",
+            "A flag."
+          ],
+          "correct": 2
+        },
+        {
+          "q": "Where is the flag at first?",
+          "answers": [
+            "In a tent.",
+            "On a bus.",
+            "In a pond."
+          ],
+          "correct": 0
+        },
+        {
+          "q": "What can Glen do with the flag?",
+          "answers": [
+            "Sip.",
+            "Run.",
+            "Clap."
+          ],
+          "correct": 1
+        }
+      ]
+    },
+    {
+      "title": "The frog",
+      "lines": [
+        "A frog is on a log.",
+        "The frog can jump.",
+        "The frog jumps in a pond.",
+        "Splash! The frog is wet."
+      ],
+      "preview": "Read together first: a, is, on, the, can. Preview jumps and splash together.",
+      "questions": [
+        {
+          "q": "Where is the frog at first?",
+          "answers": [
+            "On a mat.",
+            "On a log.",
+            "In a tent."
+          ],
+          "correct": 1
+        },
+        {
+          "q": "Where does the frog jump?",
+          "answers": [
+            "Into a bag.",
+            "Into a shop.",
+            "Into a pond."
+          ],
+          "correct": 2
+        },
+        {
+          "q": "How is the frog at the end?",
+          "answers": [
+            "Wet.",
+            "Red.",
+            "Lost."
+          ],
+          "correct": 0
+        }
+      ]
+    },
+    {
+      "title": "The raincoat",
+      "lines": [
+        "Rain tapped on the window as Ava packed her bag.",
+        "She put a raincoat beside the door.",
+        "When she stepped outside, the raincoat kept her shirt dry.",
+        "She smiled and walked to school."
+      ],
+      "preview": "Preview together: Ava, window, beside, outside, walked, school. Focus: silent e, vowel teams, and compound words.",
+      "questions": [
+        {
+          "q": "What did Ava put beside the door?",
+          "answers": [
+            "A lunchbox.",
+            "A raincoat.",
+            "A book."
+          ],
+          "correct": 1,
+          "explanation": "The second sentence says she put a raincoat beside the door."
+        },
+        {
+          "q": "Why did Ava take the raincoat?",
+          "answers": [
+            "To keep her shirt dry.",
+            "To carry her books.",
+            "To make a tent."
+          ],
+          "correct": 0,
+          "explanation": "It was raining, and the story says the raincoat kept her shirt dry."
+        },
+        {
+          "q": "What happened first?",
+          "answers": [
+            "Ava walked to school.",
+            "Ava stepped outside.",
+            "Rain tapped on the window."
+          ],
+          "correct": 2,
+          "explanation": "The rain at the window is described before Ava goes outside."
+        }
+      ]
+    },
+    {
+      "title": "The lost lunchbox",
+      "lines": [
+        "Noah looked in his bag for his lunchbox.",
+        "It was not there, so he checked beside his desk.",
+        "His friend pointed to a blue box on the shelf.",
+        "Noah found his lunchbox and thanked his friend."
+      ],
+      "preview": "Preview together: Noah, looked, checked, pointed, shelf, thanked. Focus: compounds, endings, and using clues.",
+      "questions": [
+        {
+          "q": "What was Noah looking for?",
+          "answers": [
+            "His coat.",
+            "His lunchbox.",
+            "His shoes."
+          ],
+          "correct": 1,
+          "explanation": "The first sentence says Noah looked for his lunchbox."
+        },
+        {
+          "q": "How did his friend help?",
+          "answers": [
+            "By pointing to the box.",
+            "By buying food.",
+            "By packing the bag."
+          ],
+          "correct": 0,
+          "explanation": "The friend pointed to a blue box on the shelf."
+        },
+        {
+          "q": "Which word best describes the friend?",
+          "answers": [
+            "Careless.",
+            "Sleepy.",
+            "Helpful."
+          ],
+          "correct": 2,
+          "explanation": "The friend helped Noah find something he needed, so helpful fits."
+        }
+      ]
+    },
+    {
+      "title": "Seeds in a pot",
+      "lines": [
+        "Lena filled a small pot with soil and planted seeds.",
+        "She put the pot near a window and gave it water.",
+        "For several days, the soil looked just the same.",
+        "Then a tiny green shoot pushed up through the soil."
+      ],
+      "preview": "Preview together: Lena, soil, planted, several, shoot, through. Informational topic: growing a plant.",
+      "questions": [
+        {
+          "q": "What did Lena plant?",
+          "answers": [
+            "Seeds.",
+            "Rocks.",
+            "Leaves."
+          ],
+          "correct": 0,
+          "explanation": "The first sentence says Lena planted seeds."
+        },
+        {
+          "q": "What does tiny mean in this passage?",
+          "answers": [
+            "Very noisy.",
+            "Very small.",
+            "Very old."
+          ],
+          "correct": 1,
+          "explanation": "Tiny describes the new shoot as very small."
+        },
+        {
+          "q": "Which detail shows that the plant started to grow?",
+          "answers": [
+            "The pot was small.",
+            "The soil looked the same.",
+            "A green shoot appeared."
+          ],
+          "correct": 2,
+          "explanation": "The green shoot coming through the soil is evidence of new growth."
+        }
+      ]
+    },
+    {
+      "title": "A better bridge",
+      "lines": [
+        "Eli made a bridge from blocks for his toy truck.",
+        "The first bridge fell when the truck rolled across it.",
+        "Eli added wide blocks under the middle of the bridge.",
+        "This time, the truck crossed and the bridge stayed up."
+      ],
+      "preview": "Preview together: Eli, bridge, blocks, truck, rolled, crossed. Focus: problem, solution, and evidence.",
+      "questions": [
+        {
+          "q": "What was the problem with the first bridge?",
+          "answers": [
+            "It was too colourful.",
+            "It fell when the truck crossed.",
+            "It had no truck."
+          ],
+          "correct": 1,
+          "explanation": "The second sentence says the first bridge fell."
+        },
+        {
+          "q": "What did Eli change?",
+          "answers": [
+            "He added blocks under the middle.",
+            "He threw away the truck.",
+            "He made the bridge narrower."
+          ],
+          "correct": 0,
+          "explanation": "Eli added wide blocks under the middle of the bridge."
+        },
+        {
+          "q": "How do we know the change helped?",
+          "answers": [
+            "The truck was a toy.",
+            "Eli used blocks.",
+            "The bridge stayed up."
+          ],
+          "correct": 2,
+          "explanation": "The bridge staying up when the truck crossed shows that the change helped."
+        }
+      ]
+    }
+  ],
+  "prompts": {
+    "listen": "Listen to the word. Tap the word that matches.",
+    "build": "Listen to the word. Use the letter tiles to build it. Then tap check.",
+    "read": "Read the word aloud. Listen to the three choices. Pick the one that matches.",
+    "correct": "Yes! You got it. Read the whole word aloud.",
+    "story-correct": "Yes! The story tells you that.",
+    "retry": "Not quite. Listen again. Take your time and try another answer.",
+    "story-retry": "Read the story again. Find the part that answers the question.",
+    "hint": "Listen again. Look at the letters from left to right. You can tap show the word if you need more help.",
+    "show": "Here is the word. Read it aloud, then try again.",
+    "finish": "Nice work! You finished this practice. You can try it again, or choose another lesson.",
+    "teach-demo": "Let's try one together. Listen to the word. Tap the word that matches. You can use a hint.",
+    "story-directions": "Read the story aloud. You can tap listen to hear it. Then answer the question. Tap the small play buttons if you want to hear the answers.",
+    "empty": "Put the letters in the boxes first. Then tap check.",
+    "welcome": "Welcome to Reading Room. Pick a lesson. Start with words you have learned with your grown-up.",
+    "rhyme": "Listen to the question. Listen to each choice. Choose the word with the same ending sound.",
+    "quiz": "Listen to the question. Choose the best answer. You can hear each answer before you choose.",
+    "quiz-correct": "Yes. Listen to why that answer works.",
+    "quiz-retry": "Not quite. Listen to the question and the choices again. Look for the clue.",
+    "reread": "Read this passage aloud. Try it once, then read it again. Notice where each sentence ends. You can listen to a model if you need help.",
+    "review": "These words needed another try. Let's practise them again in a new activity."
+  },
+  "stages": [
+    "Sound games",
+    "First words",
+    "Letter teams",
+    "Long vowels",
+    "More patterns",
+    "Word parts",
+    "Meaning & stories"
+  ]
+}
