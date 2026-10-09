@@ -39,3 +39,11 @@ Node 22.13+ and Python 3 are sufficient for `npm run build` and `npm test`. No r
 Tests cover all 444 main questions, additional review, ten stories, saved-question resume, save retry queues, teacher plan controls, adaptive starting-check routes, per-answer saves, check resume and reset, recommendation approval, bundled check audio, teacher access boundaries, code replacement, stale plans, weekly count differences, and deletion. They use a D1-compatible SQLite harness; deployment still needs live Cloudflare verification.
 
 Teacher notes and CMU Flite audio credits are available in Grown-ups. Review pronunciation, vocabulary, sequence, and suitability before use. Activity counts describe app responses, not oral reading, diagnostic levels or mastery.
+
+## Tablet UI checks
+
+The learner UI uses at least 48 CSS-pixel touch targets, compact landscape practice controls, and a story passage beside its questions on wide landscape screens. Browser zoom stays available. Split-screen layouts stack the content and keep passages scrollable.
+
+Optional browser regression checks: install Playwright in a development environment and its Chromium browser (`npm install --no-save --package-lock=false playwright`, then `npx playwright install chromium`), and run `npm run test:tablet`. The script checks six touch viewports, starting-check pause/resume in the tab, recommendations, hints, mixed practice and review, rotation with partial letter tiles, dialogs, area navigation, and stories. A companion check mocks code login, per-answer save, reload/resume, practice progress, and sign-out. Both scripts intercept the app page and block external requests; no production learner records are used. `READING_PLAYWRIGHT_MODULE` can point to an existing Playwright installation. `READING_BROWSER_LAUNCHER` can point to a CommonJS module exporting an async browser launcher for constrained environments.
+
+These checks use Chromium touch emulation, not physical iPad Safari. Verify Safari keyboard, safe-area insets, rotation, and audio playback on a real iPad before classroom rollout. See [NIGHT_WORK.md](NIGHT_WORK.md) for findings and remaining work.

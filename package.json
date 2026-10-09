@@ -4,7 +4,10 @@
   "scripts": {
     "build": "python3 backend/build.py && python3 build.py",
     "test": "node --test backend/tests/*.test.js",
-    "deploy": "npx wrangler@latest deploy"
+    "deploy": "npx wrangler@latest deploy",
+    "test:tablet": "node tools/check-tablet-ui.cjs && node tools/check-code-flow.cjs"
   },
-  "engines": { "node": ">=22.13" }
+  "engines": {
+    "node": ">=22.13"
+  }
 }
