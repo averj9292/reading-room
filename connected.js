@@ -8,6 +8,8 @@ teacherHTML=function(){const html=classroomTeacherHTML();if(!classroomEnabled())
 const offlineOnly=typeof location!=='undefined'&&location.protocol==='file:';
 function classroomEnabled(){return !!BACKEND_URL&&!offlineOnly;}
 function saveNotice(text){connected.notice=text;const e=document.getElementById('saveState');if(e)e.textContent=text;}
+function showPlanChanged(text){stopAudio();state.screen='plan-changed';connected.run=null;app.innerHTML=`<section class="panel center"><div class="eyebrow">Practice updated</div><h1>Your teacher changed your practice.</h1><p class="task">This activity stopped so you do not keep working on an old plan.</p><div class="cta"><button class="primary" id="reloadplan">Open my updated practice</button></div><p id="planmessage" role="status" aria-live="polite">${esc(text||'Your updated practice is ready to open.')}</p></section>${footer()}`;on('reloadplan',refreshChangedPlan);common();focusHeading();}
+async function refreshChangedPlan(){const button=document.getElementById('reloadplan'),message=document.getElementById('planmessage');if(!button||button.disabled)return;button.disabled=true;if(message)message.textContent='Opening your updated practice…';try{connected.profile=await classroomAPI('me');connected.blocked=false;connected.run=null;connected.pending.clear();connected.latest.clear();saveNotice('Your updated practice is ready.');assignedHome();}catch(e){if(message)message.textContent='Could not open the update yet. '+e.message;button.disabled=false;button.focus();}}
 async function classroomAPI(path,method='GET',body,token=connected.token){
   const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),15000);
   try{const r=await fetch(BACKEND_URL+'/v1/'+path,{method,headers:{'Content-Type':'application/json',...(token?{'Authorization':'Bearer '+token}:{})},body:body===undefined?undefined:JSON.stringify(body),cache:'no-store',credentials:'omit',signal:controller.signal});const d=await r.json();if(!r.ok){const error=new Error(d.error||'Practice could not be saved.');error.status=r.status;throw error;}return d;}finally{clearTimeout(timeout);}
@@ -45,7 +47,7 @@ async function flushProgress(){
       if(!connected.latest.size&&!connected.pending.size){saveNotice('Your place is saved.');document.getElementById('retrysave')?.remove();}
     }catch(e){
       if(payload.generation!==connected.generation)return;
-      if(e.status===409){connected.blocked=true;connected.pending.clear();connected.latest.clear();saveNotice(e.message+' Tap Check for a new plan on your practice list.');}
+      if(e.status===409){connected.blocked=true;connected.pending.clear();connected.latest.clear();saveNotice(e.message);showPlanChanged(e.message);}
       else{
         const latest=connected.latest.get(payload.runId);
         if(latest&&latest.revision>payload.revision)return;

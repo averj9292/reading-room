@@ -69,3 +69,25 @@ Started from main `3be85c7589ca29caed2d74a4d381b81642b80d96` and reviewed both p
 
 - Physical iPad Safari remains the meaningful unverified layer: test the code keyboard, audio playback, safe-area insets, rotation, VoiceOver focus announcement, and interrupted-connection retry.
 - For another automated pass, inspect focus and recovery after a teacher changes the plan while a learner still has a practice screen open. Avoid further visual changes unless a concrete issue is reproduced.
+
+## 2026-10-09: stop stale practice after a plan change
+
+Started from main `4eef648315b26009eb71324db46d1f018b816876` and reviewed all prior entries before testing teacher-plan-change recovery.
+
+### Findings and changes
+
+- Reproduced a meaningful stale-plan issue. When a progress save returned 409 because the teacher had changed the plan, saving stopped safely, but the old activity stayed interactive. A learner could continue answering an entire lesson that the app already knew could not save.
+- A plan conflict now immediately replaces the stale activity with one simple recovery screen. It explains that the activity stopped and provides a single `Open my updated practice` action. Old answer, hint, next, and story controls are removed, so unsaved work cannot continue by accident.
+- The recovery action fetches the existing authenticated learner record, clears only obsolete client-side run queues, and returns to the normal one-next-lesson screen. If refresh fails, the same screen keeps the learner in place, explains the error, re-enables the button, and focuses it for retry.
+
+### Validation
+
+- `npm run build` and all 15 `npm test` tests passed. The plan-change test now confirms that the stale activity is removed, the dedicated recovery screen appears, plan version 2 loads, and a subsequent run saves normally.
+- Chromium 153 touch emulation passed all 488 established assertions across six portrait, landscape, and split-screen sizes with zero script errors.
+- The mocked classroom browser flow forced a progress 409 at 768 × 507, confirmed that old practice controls disappeared, the update action was fully visible without horizontal overflow, the new plan loaded, and sign-out remained available. It also revalidated the complete starting check and both transient save-retry paths.
+- Bundled audio remained unchanged. No backend, database, authentication, learner-record format, content, tracking, student fields, or microphone behavior changed.
+
+### Next useful step
+
+- Use a physical iPad to verify Safari audio, code-keyboard behavior, safe areas, rotation, VoiceOver announcements, transient retries, and the teacher-plan-change screen.
+- After teacher review, the next product work should be evidence-led instructional feedback or audio replacement, not more generic visual polish. No additional automated UI issue is currently documented.

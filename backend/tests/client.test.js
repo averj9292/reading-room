@@ -77,8 +77,8 @@ test('an older failed save cannot replace a newer queued snapshot',async()=>{
 
 test('returning to guided practice after a teacher plan change restores future saves',async()=>{
   const f=fixture();const i=CONTENT.lessons.findIndex(l=>l.id==='sh');
-  f.run('teach('+i+');startPractice()');f.conflict();await f.run('flushProgress()');assert.equal(f.run('connected.blocked'),true);
+  f.run('teach('+i+');startPractice()');f.conflict();await f.run('flushProgress()');assert.equal(f.run('connected.blocked'),true);assert.equal(f.run('state.screen'),'plan-changed');assert.match(f.run('app.innerHTML'),/Open my updated practice/);assert.doesNotMatch(f.run('app.innerHTML'),/id="hint"/);
   f.profile({readerNumber:1,plan:['sh','stories'],planVersion:2,completed:[],completedStories:[],practiceStatus:[],resume:null,placement:null});
-  await f.run('returnToGuide()');assert.equal(f.run('connected.blocked'),false);assert.equal(f.run('connected.profile.planVersion'),2);
+  await f.run('refreshChangedPlan()');assert.equal(f.run('connected.blocked'),false);assert.equal(f.run('connected.profile.planVersion'),2);
   f.run('startGuidedLesson("sh");startPractice()');await f.run('flushProgress()');assert.equal(f.writes.length,1);assert.equal(f.writes[0].planVersion,2);
 });

@@ -6,7 +6,7 @@ const fs=require('node:fs'),assert=require('node:assert/strict'),path=require('n
  const {Placement}=await import(root+'/backend/placement.js');
  const b=await launch();try { const context=await b.newContext({viewport:{width:768,height:1024},hasTouch:true,isMobile:true});const p=await context.newPage();
  const profile={token:'synthetic-test-session',readerNumber:0,plan:[],planVersion:1,completed:[],completedStories:[],practiceStatus:[],resume:null,placement:{generation:1,status:'pending',answers:[],result:null}};
- let writes=0,failProgress=0,failPlacement=0;const errors=[];p.on('pageerror',e=>errors.push(e.message));
+ let writes=0,failProgress=0,failPlacement=0,conflictProgress=0;const errors=[];p.on('pageerror',e=>errors.push(e.message));
  await p.route('**/*',async r=>{
   const req=r.request(),url=req.url();
   if(url==='https://reading.local/')return r.fulfill({contentType:'text/html',body:fs.readFileSync(root+'/index.html','utf8')});
@@ -19,6 +19,7 @@ const fs=require('node:fs'),assert=require('node:assert/strict'),path=require('n
    profile.placement.answers=Placement.validate([...profile.placement.answers,{id:payload.itemId,answer:payload.answer}]);
    if(!Placement.next(profile.placement.answers)){profile.placement.status='complete';profile.placement.result=Placement.result(profile.placement.answers);profile.plan=profile.placement.result.plan;profile.planVersion++;}
   }
+  if(endpoint==='progress'&&conflictProgress){conflictProgress--;return r.fulfill({status:409,contentType:'application/json',headers,body:'{"error":"Your teacher changed your plan."}'});}
   if(endpoint==='progress'&&failProgress){failProgress--;return r.fulfill({status:503,contentType:'application/json',headers,body:'{"error":"Temporary test outage"}'});}
   if(endpoint==='progress'){writes++;profile.resume={runId:payload.runId,lessonId:payload.lessonId,revision:payload.revision,snapshot:payload.snapshot};}
   return r.fulfill({contentType:'application/json',headers,body:JSON.stringify(endpoint==='progress'||endpoint==='logout'?{ok:true}:profile)});
@@ -43,6 +44,9 @@ const fs=require('node:fs'),assert=require('node:assert/strict'),path=require('n
  await p.locator('#retrysave').waitFor();
  const retry=await p.locator('#retrysave').boundingBox();assert.ok(retry.width>=44&&retry.height>=44,`retry target was ${JSON.stringify(retry)}`);assert.ok(retry.y>=0&&retry.y+retry.height<=507,`retry was outside the landscape viewport: ${JSON.stringify(retry)}`);assert.ok(await p.locator('#saveState').innerText().then(t=>t.startsWith('Not saved yet.')));assert.ok(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
  await p.locator('#retrysave').tap();await p.waitForFunction(()=>connected.latest.size===0&&connected.pending.size===0);assert.equal(await p.locator('#saveState').innerText(),'Your place is saved.');
+ profile.plan=['ch','stories'];profile.planVersion++;profile.completed=[];profile.practiceStatus=[];profile.resume=null;conflictProgress=1;await p.locator('#next').tap();await p.locator('#reloadplan').waitFor();
+ const updateButton=await p.locator('#reloadplan').boundingBox();assert.equal(await p.evaluate(()=>state.screen),'plan-changed');assert.equal(await p.locator('#hint').count(),0);assert.ok(updateButton.y>=0&&updateButton.y+updateButton.height<=507);assert.ok(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
+ await p.locator('#reloadplan').tap();await p.locator('#guidedstart').waitFor();assert.equal(await p.evaluate(()=>connected.profile.planVersion),profile.planVersion);assert.equal(await p.evaluate(()=>connected.blocked),false);
  await p.locator('#signout').tap();await p.locator('#learnercode').waitFor();assert.equal(await p.locator('#learnercode').isVisible(),true);assert.deepEqual(errors,[]);
- console.log(JSON.stringify({mockCodeLogin:true,startingCheckFailureFocus:true,startingCheckReloadResume:true,recommendedPlan:true,savedPracticeReloadResume:true,splitScreenSaveRetry:true,signOut:true,progressWrites:writes,scriptErrors:errors.length}));} finally {await b.close();}
+ console.log(JSON.stringify({mockCodeLogin:true,startingCheckFailureFocus:true,startingCheckReloadResume:true,recommendedPlan:true,savedPracticeReloadResume:true,splitScreenSaveRetry:true,changedPlanRecovery:true,signOut:true,progressWrites:writes,scriptErrors:errors.length}));} finally {await b.close();}
 })().catch(e=>{console.error(e);process.exitCode=1;});
