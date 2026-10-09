@@ -41,3 +41,21 @@ test('save failures are visible beside the button and keep the unsaved selection
   assert.equal(d.node('firstlesson').value,'sh');assert.equal(d.node('saveplan').disabled,false);
   assert.deepEqual(d.reader.plan,[]);
 });
+
+test('reader report keeps date-range counts, observations and escaped targets separate',()=>{
+  const source=readFileSync(new URL('../teacher.html',import.meta.url),'utf8').match(/<script>([\s\S]*?)<\/script>/)[1];
+  const c=vm.createContext({document:{getElementById(){return {};}}});
+  vm.runInContext(source.slice(0,source.indexOf("el('create').onclick")),c);
+  const report={runs:[{reader_number:1,lessonName:'The sh team',total:3,first_try:2,helped:1,review:0,targets:['<script>bad</script>']},{reader_number:1,lessonName:'The sh team',total:2,first_try:1,helped:1,review:1,targets:['ship']}],observations:[{reader_number:2,lessonName:'Words',observation:'Read with support',created_at:Date.now()}],placements:[]};
+  c.report=report;const groups=vm.runInContext('readerReportGroups(report)',c);assert.equal(groups.length,2);assert.equal(groups[0].total,5);assert.equal(groups[0].help,2);assert.equal(groups[0].review,1);assert.equal(groups[1].total,0);
+  const html=vm.runInContext('renderReaderReports(report)',c);assert.match(html,/Reader 02/);assert.match(html,/Check attendance or access/);assert.match(html,/Listen to the reader try/);assert.match(html,/&lt;script&gt;/);assert.doesNotMatch(html,/<script>bad/);assert.match(html,/do not identify the type or frequency/);
+});
+
+test('report retains requested dates when date controls change while loading',async()=>{
+  const source=readFileSync(new URL('../teacher.html',import.meta.url),'utf8').match(/<script>([\s\S]*?)<\/script>/)[1];
+  const nodes={from:{value:'2026-10-01'},through:{value:'2026-10-07'},reportbody:{},message:{},planmessage:{}};let release;
+  const c=vm.createContext({document:{getElementById:id=>nodes[id]},fetch:async()=>{await new Promise(r=>release=r);return {ok:true,json:async()=>({runs:[],observations:[],placements:[]})};}});
+  vm.runInContext(source.slice(0,source.indexOf("el('create').onclick")),c);
+  const pending=vm.runInContext('loadReport()',c);nodes.from.value='2026-10-08';release();await pending;
+  assert.match(nodes.reportbody.innerHTML,/2026-10-01 to 2026-10-07/);assert.equal(vm.runInContext('reportData.range.from',c),'2026-10-01');
+});

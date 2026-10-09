@@ -82,3 +82,14 @@ test('returning to guided practice after a teacher plan change restores future s
   await f.run('refreshChangedPlan()');assert.equal(f.run('connected.blocked'),false);assert.equal(f.run('connected.profile.planVersion'),2);
   f.run('startGuidedLesson("sh");startPractice()');await f.run('flushProgress()');assert.equal(f.writes.length,1);assert.equal(f.writes[0].planVersion,2);
 });
+
+test('teaching escalates after two misses, records support and resumes the same helped question',async()=>{
+  const f=fixture(),i=CONTENT.lessons.findIndex(l=>l.id==='sh');
+  f.run('teach('+i+')');assert.match(f.run('app.innerHTML'),/Let’s learn together/);assert.match(f.run('app.innerHTML'),/letter team/);
+  f.run('startPractice()');f.solve();const q=f.run('state.current'),wrong=q.choices.findIndex(w=>w!==q.word);
+  f.run('choose('+wrong+')');assert.equal(f.run('state.assisted'),false);assert.match(f.run('document.getElementById("feedback").textContent'),/Try this:.*letter team/);
+  f.run('choose('+wrong+')');assert.equal(f.run('state.assisted'),true);assert.match(f.run('document.getElementById("hintbox").innerHTML'),/spelling parts/);f.validate();
+  f.run('state.assisted=false;state.attempts=0;resumeRun()');assert.equal(f.run('state.assisted'),true);assert.equal(f.run('state.attempts'),2);
+  f.run('choose('+q.choices.indexOf(q.word)+')');assert.equal(f.run('state.stats.first'),0);assert.equal(f.run('state.stats.help'),1);f.validate();
+  await f.run('flushProgress()');assert.equal(f.writes.at(-1).snapshot.assisted,true);
+});

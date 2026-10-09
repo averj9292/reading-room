@@ -91,3 +91,27 @@ Started from main `4eef648315b26009eb71324db46d1f018b816876` and reviewed all pr
 
 - Use a physical iPad to verify Safari audio, code-keyboard behavior, safe areas, rotation, VoiceOver announcements, transient retries, and the teacher-plan-change screen.
 - After teacher review, the next product work should be evidence-led instructional feedback or audio replacement, not more generic visual polish. No additional automated UI issue is currently documented.
+
+## 2026-10-09: stronger teaching and teacher-ready reports
+
+Started from main `a544a413a2bf2d315844cf78e705e480cc545309`. This work was requested after the UI review, specifically to improve instruction and the teacher report before a demonstration.
+
+### Changes
+
+- All 37 non-story lesson screens now include an original worked teaching example and a clear strategy. Word-ending and compound examples show meaningful word parts; spelling boxes are explicitly not described as phoneme counts.
+- A first wrong choice or completed incorrect tile word receives a strategy cue. After a second miss, worked help opens automatically. Existing support/attempt fields preserve this distinction on resume and in counts; helped answers never become first-try responses.
+- The protected weekly report groups activity by reader, separates main answers and extra review, shows saved targets and in-person observations, and suggests an appropriate adult check. It includes readers with observations/checks even when they have no practice answers in the range.
+- Report language explains that saved targets can include earlier parts of a run and do not identify error frequency or a diagnosis. Print and CSV retain the dates actually loaded even if controls change later.
+- Deployed only the teacher-page module through Cloudflare's content-only endpoint. Existing Worker, placement and catalog modules were matched by SHA-256 and preserved; configuration, authentication, database bindings and records were not changed.
+
+### Validation
+
+- Build and 18 regression tests passed, including second-miss support persistence, report aggregation, escaping, observation-only readers and changing date controls during a pending report request.
+- Chromium 153 local touch emulation: 488 established tablet/learner checks and the full mocked code/check/save/reload/retry/plan-conflict flow passed. An additional 364 teaching/report checks passed at 768×1024, 1024×768, 507×768 and 768×507; they cover all lesson teaching screens, wrong-answer support, print visibility, CSV dates and layout overflow. No production learner requests were used.
+- Visually inspected the report print layout. Audio was verified unchanged against an exactly reconstructed previous-main build (Git blob SHA matched the remote index). No ElevenLabs generation or credits were used.
+- Browser Rendering was rejected by automatic review because it might incur charges; validation instead used a downloaded local Chromium package. A full-source comparison request was also rejected; a safer hash-only comparison succeeded and the content-only update preserved all unrelated deployed modules.
+
+### Next useful step
+
+- Pennell should try one word-pattern lesson and review one reader summary, checking whether the cue and suggested adult check fit her teaching. Add specific teaching content based on that feedback.
+- Replace audio only after the user chooses a satisfactory ElevenLabs sample. Physical iPad Safari and VoiceOver still require device testing.

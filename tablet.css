@@ -126,3 +126,6 @@ details.panel[open] summary::before{content:'−'}
   .panel,.welcome{animation:none}
   button:active:not(:disabled){transform:none}
 }
+
+/* Teaching support stays inside the existing one-lesson flow. */
+.teaching-model{margin:18px 0;padding:16px;border:1px solid #cfdaeb;border-radius:12px;background:#f4f7fc}.teaching-model h2{font-size:1.25rem;margin:0 0 12px}.teaching-model p{margin:10px 0}.teaching-word{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:12px 0}.teaching-word strong{font-size:1.4rem}.examplebox p{font-size:1rem;font-weight:400;text-align:left}.examplebox .teaching-word{justify-content:center}

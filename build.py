@@ -9,7 +9,7 @@ if backend:
     parsed=urlparse(backend)
     assert parsed.scheme=='https' and parsed.netloc and parsed.path in ('','/') and not parsed.query and not parsed.fragment and not parsed.username
     backend=parsed.scheme+'://'+parsed.netloc
-app=app[:-len('home();')]+(root/'expanded.js').read_text()+'\n'+(root/'placement.js').read_text()+'\n'+(root/'connected.js').read_text().replace('/*BACKEND_URL*/',json.dumps(backend))+'\n'+(root/'guided.js').read_text()+'\nhome();\n'
+app=app[:-len('home();')]+(root/'expanded.js').read_text()+'\n'+(root/'teaching.js').read_text()+'\n'+(root/'placement.js').read_text()+'\n'+(root/'connected.js').read_text().replace('/*BACKEND_URL*/',json.dumps(backend))+'\n'+(root/'guided.js').read_text()+'\nhome();\n'
 app=app.replace('/*CONTENT_DATA*/',json.dumps(json.loads((root/'content.json').read_text()),separators=(',',':')))
 if (root/'audio-data.json').exists():
     audio=(root/'audio-data.json').read_text()
