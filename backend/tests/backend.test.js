@@ -103,3 +103,40 @@ test('teacher HTML uses a matching CSP hash and no external scripts',async()=>{
   const digest=Buffer.from(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(script))).toString('base64');
   assert.ok(r.headers.get('Content-Security-Policy').includes(digest));assert.equal(/<script[^>]+src/.test(html),false);
 });
+
+test('starting check saves one first answer, resumes, derives its plan, and supports teacher review and reset',async()=>{
+  const {Placement}=await import('../placement.js');
+  const e=env(),ctx=context('teacher@example.com');
+  const created=await data(await request(e,'/teacher/api/readers',{method:'POST',body:{},ctx}),201);
+  let profile=await data(await request(e,'/v1/login',{method:'POST',body:{code:created.code}}));
+  const token=profile.token;assert.equal(profile.placement.status,'pending');
+  profile=await data(await request(e,'/v1/placement/start',{method:'POST',body:{planVersion:1},token}));
+  const q=Placement.next(profile.placement.answers);
+  await data(await request(e,'/v1/placement',{method:'PUT',body:{generation:1,planVersion:1,itemId:'made-up',answer:0},token}),409);
+  const first={generation:1,planVersion:1,itemId:q.id,answer:q.correct,studentName:'Never save this',result:{plan:['stories']}};
+  profile=await data(await request(e,'/v1/placement',{method:'PUT',body:first,token}));
+  profile=await data(await request(e,'/v1/placement',{method:'PUT',body:first,token}));
+  assert.equal(profile.placement.answers.length,1);
+  const resumed=await data(await request(e,'/v1/login',{method:'POST',body:{code:created.code}}));assert.deepEqual(resumed.placement.answers,profile.placement.answers);
+  while(Placement.next(profile.placement.answers)){
+    const item=Placement.next(profile.placement.answers);
+    profile=await data(await request(e,'/v1/placement',{method:'PUT',token,body:{generation:1,planVersion:1,itemId:item.id,answer:item.correct}}));
+  }
+  assert.equal(profile.placement.status,'complete');assert.equal(profile.placement.answers.length,28);assert.equal(profile.planVersion,2);
+  assert.deepEqual(profile.plan,Placement.result(profile.placement.answers).plan);
+  const last=profile.placement.answers.at(-1);
+  const replay=await data(await request(e,'/v1/placement',{method:'PUT',token,body:{generation:1,planVersion:1,itemId:last.id,answer:last.answer}}));assert.equal(replay.planVersion,2);
+  await data(await request(e,'/teacher/api/readers/'+created.id+'/approve',{method:'POST',body:{planVersion:2},ctx}));
+  assert.equal((await data(await request(e,'/v1/me',{token}))).placement.status,'reviewed');
+  const report=await data(await request(e,'/teacher/api/report?from=0&to='+Date.now(),{ctx}),400); // range remains bounded
+  const week=await data(await request(e,'/teacher/api/report?from='+(Date.now()-10000)+'&to='+Date.now(),{ctx}));assert.equal(week.placements.length,1);
+  const backup=await data(await request(e,'/teacher/api/export',{ctx}));assert.equal(backup.placements.length,1);assert.equal(JSON.stringify(backup).includes('Never save this'),false);
+  await data(await request(e,'/teacher/api/readers/'+created.id+'/placement',{method:'POST',body:{planVersion:2},ctx:context('other@example.com')}),404);
+  await data(await request(e,'/teacher/api/readers/'+created.id+'/placement',{method:'POST',body:{planVersion:2},ctx}));
+  profile=await data(await request(e,'/v1/me',{token}));assert.equal(profile.planVersion,3);assert.equal(profile.placement.generation,2);assert.equal(profile.placement.status,'pending');assert.deepEqual(profile.plan,[]);
+  await data(await request(e,'/v1/placement',{method:'PUT',token,body:first}),409);
+  await data(await request(e,'/teacher/api/readers/'+created.id+'/plan',{method:'PUT',body:{lessonIds:['sh'],planVersion:3},ctx}));
+  await data(await request(e,'/v1/placement/start',{method:'POST',body:{planVersion:4},token}),409);
+  assert.equal((await data(await request(e,'/v1/me',{token}))).placement.status,'overridden');
+  await data(await request(e,'/teacher/api/readers/'+created.id,{method:'DELETE',body:{},ctx}));assert.equal(e.DB.raw.prepare('SELECT COUNT(*) n FROM placements').get().n,0);
+});

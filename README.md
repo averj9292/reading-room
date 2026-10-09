@@ -10,9 +10,17 @@ Audio, letter-tile building, vocabulary, prefixes and suffixes, hints and retrie
 
 ## Classroom backend
 
-The repo now includes a Cloudflare Workers + D1 backend, teacher dashboard, and optional learner-code integration. Teachers assign practice to reader numbers, keep their student-to-code list offline, enter structured read-aloud observations, and print weekly reports. Learners can resume the saved question, including hint and retry state. Teacher records are separated by the signed-in teacher.
+The repo now includes a Cloudflare Workers + D1 backend, teacher dashboard, and optional learner-code integration. Teachers create a reader number and code, keep the student-to-code list offline, and give the code to the learner. New readers take a short starting check, receive a suggested practice plan, and see one next lesson. Teachers review or change the plan, enter structured read-aloud observations, and print weekly reports. Learners can resume the saved question, including hint and retry state. Teacher records are separated by the signed-in teacher.
 
 The backend is deployed at https://reading-room.averyjconsulting.workers.dev. Learner code entry is enabled alongside open practice. Teacher access initially allows the Cloudflare account owner only. Health and signed-out teacher protection have passed live checks; the owner still needs to sign in and verify a disposable reader end to end. See [DEPLOYMENT.md](DEPLOYMENT.md) for setup and classroom verification. Missing configuration fails closed.
+
+## Starting check and guided practice
+
+The original starting check uses 12–28 multiple-choice questions covering short-vowel words, letter teams, vowel patterns, word parts, listening comprehension, and short-passage comprehension when appropriate. Harder word sections stop after difficulty; the listening section is separate. Answers save individually and resume after code entry. A no-code preview stays in the current tab.
+
+The routing rule is a practice heuristic: three correct answers out of four moves to the next word section. It is not a validated placement test, a grade-level measure, a diagnosis, or an oral-reading assessment. Untested skills are shown as untested. Teachers can keep the recommendation, assign their own plan, or restart the check. Restarting replaces the current check but retains lesson history.
+
+Learners see one next step, resume unfinished practice, revisit a lesson once if at least a third of its questions needed help, and alternate word practice with stories when stories are assigned. Completing a plan asks for teacher next steps; it does not claim mastery.
 
 ## Hosting and offline
 
@@ -20,14 +28,14 @@ GitHub Pages serves `index.html` from main at the repository root. The file cont
 
 ## Privacy
 
-Open practice uses page memory and clears on reload. Connected practice saves coded learning records online. There are no student-name, student-email, birthdate, school, photo, microphone or free-text note fields. Coded records are not guaranteed anonymous. Teacher sign-in uses Cloudflare Access and a teacher email address. GitHub and Cloudflare have separate operational logging.
+Open practice uses page memory and clears on reload. Connected practice saves coded learning records online, including starting-check answer IDs, selected choice numbers, the recommendation, and lesson progress. There are no student-name, student-email, birthdate, school, photo, microphone or free-text note fields. Coded records are not guaranteed anonymous. Teacher sign-in uses Cloudflare Access and a teacher email address. GitHub and Cloudflare have separate operational logging.
 
 No ads, app analytics, or external speech services. Learner codes and session tokens remain in browser memory. Teacher exports are private learning records; learner codes never belong in this public repo.
 
 ## Build and verify
 
-Node 22.13+ and Python 3 are sufficient for `npm run build` and `npm test`. No runtime npm dependencies are used by the app or Worker. The build recovers bundled audio from the existing index file and regenerates CSP hashes. A local audio-data.json may override it but should not be committed as a duplicate.
+Node 22.13+ and Python 3 are sufficient for `npm run build` and `npm test`. No runtime npm dependencies are used by the app or Worker. The build recovers bundled audio from the existing index file, merges the committed placement-audio.json clips, and regenerates CSP hashes. A local audio-data.json may override it but should not be committed as a duplicate.
 
-Tests cover all 444 main questions, additional review, ten stories, saved-question resume, save retry queues, teacher access boundaries, code replacement, stale plans, weekly count differences, and deletion. They use a D1-compatible SQLite harness; deployment still needs live Cloudflare verification.
+Tests cover all 444 main questions, additional review, ten stories, saved-question resume, save retry queues, teacher plan controls, adaptive starting-check routes, per-answer saves, check resume and reset, recommendation approval, bundled check audio, teacher access boundaries, code replacement, stale plans, weekly count differences, and deletion. They use a D1-compatible SQLite harness; deployment still needs live Cloudflare verification.
 
 Teacher notes and CMU Flite audio credits are available in Grown-ups. Review pronunciation, vocabulary, sequence, and suitability before use. Activity counts describe app responses, not oral reading, diagnostic levels or mastery.

@@ -6,7 +6,7 @@ import { cleanSnapshot } from '../worker.js';
 import { CONTENT } from '../catalog.js';
 
 function fixture() {
-  function element(){return {innerHTML:'',hidden:true,style:{},textContent:'',className:'',classList:{add(){},toggle(){}},addEventListener(){},focus(){},setAttribute(){},querySelector(){return element();},querySelectorAll(){return [];},append(){},after(){},remove(){}};}
+  function element(){return {innerHTML:'',hidden:true,style:{},textContent:'',className:'',classList:{add(){},toggle(){}},addEventListener(){},focus(){},setAttribute(){},querySelector(){return element();},querySelectorAll(){return [];},append(){},after(){},remove(){},replaceWith(){}};}
   const nodes={app:element(),overlay:element()};
   const document={getElementById(id){return nodes[id]??(nodes[id]=element());},querySelector(){return element();},createElement:element,body:element(),activeElement:element(),addEventListener(){}};
   class Audio {pause(){}play(){return Promise.resolve();}addEventListener(){}}

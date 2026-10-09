@@ -2,12 +2,14 @@
 
 The backend is deployed at https://reading-room.averyjconsulting.workers.dev with its D1 database, private code secret, rate-limit bindings, and path-scoped Cloudflare Access. Teacher sign-in initially allows the Cloudflare account owner only. The live health check and signed-out protection for teacher pages and API paths have been verified. The owner still needs to sign in, create a disposable reader, and complete the classroom checks below before real classroom use. `backend-url.txt` enables learner code entry; open practice remains available.
 
-## Your existing GitHub-connected Worker
+## Worker configuration
+
+The current Worker was deployed through the Cloudflare API. This does not create a GitHub build trigger. The following repository settings also support a GitHub-connected deployment once that trigger is configured.
 
 1. In Cloudflare, open your Worker under **Workers & Pages**. Note its name and its public `https://…workers.dev` URL. The `name` in root `wrangler.jsonc` must match the existing Worker name. It currently says `reading-room`.
 2. Leave the build root at the repository root. Use `npx wrangler@latest deploy` as the deploy command. The generated backend files are committed, so no frontend build is required in Cloudflare. Do not configure Static Assets or a framework router for this Worker: the teacher page is served directly so Cloudflare supplies its verified Access context.
 3. Create a **D1 database** called `reading-room` under **Storage & Databases → D1**. Copy its database ID into `wrangler.jsonc`. These IDs are configuration, not passwords.
-4. Run `backend/schema.sql` against that database. You can use the D1 dashboard console, or from a local checkout run `npx wrangler@latest d1 execute reading-room --remote --file=backend/schema.sql`. Keep the foreign-key definition and transaction behaviour intact.
+4. For a new database, run `backend/schema.sql` against that database. For an existing Reading Room database, apply `backend/migrations/0001_starting_checks.sql` before deploying the updated Worker; it adds the check table without changing existing readers or lesson history. You can use the D1 dashboard console, or from a local checkout run `npx wrangler@latest d1 execute reading-room --remote --file=backend/schema.sql`. Keep the foreign-key definition and transaction behaviour intact.
 5. Add a Worker **secret** called `CODE_PEPPER`, containing a randomly generated secret of at least 32 characters. Generate it locally with `node -e "console.log(require('node:crypto').randomBytes(32).toString('hex'))"`, then enter it directly in Cloudflare. Do not put it in GitHub, `wrangler.jsonc`, a screenshot, or chat. Keep it stable; changing it invalidates all learner codes.
 
 The D1 binding must be named `DB`. The rate-limit bindings are declared in `wrangler.jsonc`; use namespace IDs that do not collide with other Workers you own. GitHub-connected deployment uses the file's configuration, so changes to those public values belong in the repo too.
@@ -27,9 +29,9 @@ Current references: [path-scoped Access and verified Worker identity](https://de
 ## Activate learner code entry
 
 1. Verify `/health` returns `{"ok":true,"version":1}`. This checks required bindings and settings, not the full security configuration.
-2. Open `/teacher`. Complete teacher sign-in. Create one test reader, write down its code, assign a few skills, and save the plan. The code is shown once. The server stores only a keyed hash of it.
+2. Open `/teacher`. Complete teacher sign-in. Create one test reader and write down its code. A starting check is ready automatically. You can instead choose a starting skill and save a manual plan. The code is shown once. The server stores only a keyed hash of it.
 3. Put the Worker origin, with no path or trailing slash, into root `backend-url.txt`. Run `npm run build` using Node 22.13+ and Python 3. This compiles code entry into `index.html` and permits network requests only to this backend origin. Commit the resulting `index.html` and `backend-url.txt` to GitHub.
-4. On the live GitHub Pages app, enter the test code, answer several questions, reload, enter the same code, and choose **Keep going**. Confirm the question, hints and completed answers resume correctly.
+4. On the live GitHub Pages app, enter the test code, start the check, answer several questions, reload, enter the same code, and choose **Continue the check**. Finish the check and verify its suggested plan in the teacher dashboard. Keep that plan or change it. Then start a lesson, answer several practice questions, reload, enter the code, and choose **Keep going**. Confirm the question, hints and completed answers resume correctly.
 5. In the teacher dashboard, load the current week's report. Check activity counts and observations, print the report, and download CSV and a full learning-record export.
 6. In a signed-out browser, verify teacher paths require Access sign-in. Learner codes must not grant teacher access, list other readers, or retrieve reports. A different teacher must see only the readers they created.
 7. Replace the test code; verify the old code and existing learner session stop working. After testing, remove the disposable test reader through the dashboard.
@@ -41,6 +43,7 @@ The backend is deployed; the signed-in teacher and learner workflow checks above
 - Reader number and random internal ID; teacher ownership as a hash of the authenticated teacher email.
 - A keyed hash of each 12-character learner code; temporary session-token hashes with eight-hour expiry.
 - Assigned lesson IDs and plan version.
+- Starting-check item IDs, selected choice numbers (or a numeric skip), generation, timestamps, and a server-derived recommendation. The app does not accept learner-written notes or supplied scores.
 - Current question, generated choices and tiles, hints, retries, completed main answers, extra review, and timestamps.
 - Structured teacher read-aloud observations, selected from fixed choices.
 
@@ -48,13 +51,17 @@ There are no student-name, student-email, birthdate, school, photo, microphone, 
 
 Learner codes and tokens remain in browser memory, not local storage or cookies. Reloading requires code entry again. Progress saves while online; unsent work remains only in the open tab. A save failure is displayed with a Retry save button. Closing an unsaved tab can lose its recent work. Shared-device users should finish and sign out.
 
-Choose one Starting skill in the teacher dashboard and save. The starting skill is included automatically; additional lessons are optional. Saving an unchanged plan preserves its version and any activity in progress. Changing a practice plan begins a new assignment version. Earlier activity remains in reports; an old in-progress activity cannot continue against the new plan. Students choose only assigned lessons in connected mode. A completed lesson is labelled Practised, not mastered. The teacher chooses next steps.
+New readers begin with a short starting check. The teacher sees answer counts, skips, untested skills, and the recommended plan; Keep this suggested plan marks it reviewed. A learner can begin the recommendation before review. The teacher can override it at any time.
+
+The original check uses a three-of-four routing heuristic, with 12–28 questions and no timer. It is not a normed assessment, grade-level score, diagnosis, mastery score, or oral-fluency measurement. Restarting the check replaces its current answers and recommendation, clears the assignment, and preserves lesson history. Export first if you want to retain that check separately.
+
+For a manual plan, choose one Starting skill in the teacher dashboard and save. The starting skill is included automatically; additional lessons are optional. Saving an unchanged plan preserves its version and any activity in progress. Changing a practice plan begins a new assignment version. Earlier activity remains in reports; an old in-progress activity cannot continue against the new plan. Connected learners see one next step, with their assigned plan in a collapsed list. An unfinished activity resumes first. A lesson needing help on at least a third of its questions gets one more practice pass. Stories alternate with word practice when assigned. A completed lesson is labelled Practised, not mastered. The teacher chooses next steps.
 
 ## Reports, exports and record removal
 
 Weekly counts use changes saved in the selected date range, not cumulative totals copied into the week a lesson finishes. Report dates use the teacher browser's local timezone. Review targets describe the activity's accumulated targets, so they may include earlier difficulties in a lesson spanning weeks. Read-aloud observations are teacher entries; no voice or measured fluency is captured.
 
-The full JSON export contains assignments, practice snapshots, activity events and observations for the signed-in teacher's readers. It excludes code hashes, learner codes and sessions. Keep exports private. There is no automatic import/restore screen in this version; the export preserves records for recovery work. There is no automatic history deletion in this pilot. Teachers can delete an individual reader and their active records; Cloudflare recovery copies may persist separately. The teacher dashboard asks for explicit confirmation before deletion.
+The full JSON export contains assignments, current starting checks and recommendations, practice snapshots, activity events and observations for the signed-in teacher's readers. It excludes code hashes, learner codes and sessions. Keep exports private. There is no automatic import/restore screen in this version; the export preserves records for recovery work. There is no automatic history deletion in this pilot. Teachers can delete an individual reader and their active records; Cloudflare recovery copies may persist separately. The teacher dashboard asks for explicit confirmation before deletion.
 
 Activity counts originate in the learner app and can be manipulated by someone controlling that browser. They support teaching decisions, not high-stakes assessment or verified grades.
 
@@ -66,6 +73,6 @@ D1's placement hints are not a guarantee that all processing and records stay in
 
 ## Local verification
 
-Run `npm run build` then `npm test`. Tests exercise the backend through a D1-compatible SQLite harness, including teacher ownership, forged-header rejection, stale plans, lost-code replacement, signed-out behaviour, deletion, weekly count differences, and snapshot validation for all 444 main practice questions plus review and stories. They also check queued saves and resume state. They do not replace live Cloudflare checks.
+Run `npm run build` then `npm test`. Tests exercise the backend through a D1-compatible SQLite harness, including teacher ownership, forged-header rejection, stale plans, lost-code replacement, signed-out behaviour, deletion, weekly count differences, and snapshot validation for all 444 main practice questions plus review and stories. They also check starting-check routing, idempotent per-answer saves, resume, teacher review/reset/manual override, bundled check audio, queued lesson saves, and resume state. They do not replace live Cloudflare checks.
 
 Audio is already inside `index.html`. The build reuses it, so no speech service or audio-generation dependency is needed to rebuild the app. `audio-license.txt` contains the included Flite credit. Classroom mode is disabled for an offline file opened with `file:`; its lessons and audio still work without saving to the teacher dashboard.

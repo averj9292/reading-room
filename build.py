@@ -9,13 +9,15 @@ if backend:
     parsed=urlparse(backend)
     assert parsed.scheme=='https' and parsed.netloc and parsed.path in ('','/') and not parsed.query and not parsed.fragment and not parsed.username
     backend=parsed.scheme+'://'+parsed.netloc
-app=app[:-len('home();')]+(root/'expanded.js').read_text()+'\n'+(root/'connected.js').read_text().replace('/*BACKEND_URL*/',json.dumps(backend))+'\nhome();\n'
+app=app[:-len('home();')]+(root/'expanded.js').read_text()+'\n'+(root/'placement.js').read_text()+'\n'+(root/'connected.js').read_text().replace('/*BACKEND_URL*/',json.dumps(backend))+'\n'+(root/'guided.js').read_text()+'\nhome();\n'
 app=app.replace('/*CONTENT_DATA*/',json.dumps(json.loads((root/'content.json').read_text()),separators=(',',':')))
 if (root/'audio-data.json').exists():
     audio=(root/'audio-data.json').read_text()
 else:
     audio=re.search(r'const AUDIO=(.*?);\nconst app=',(root/'index.html').read_text(),re.S).group(1)
     json.loads(audio)
+if (root/'placement-audio.json').exists():
+    bank=json.loads(audio);extra=json.loads((root/'placement-audio.json').read_text());bank['lookup'].update(extra['lookup']);bank['clips'].update(extra['clips']);audio=json.dumps(bank,separators=(',',':'))
 app=app.replace('/*AUDIO_DATA*/',audio)
 license=(root/'audio-license.txt').read_text()
 app=app.replace('/*AUDIO_CREDIT*/',html.escape(license).replace('`','&#96;').replace('${','&#36;{'))

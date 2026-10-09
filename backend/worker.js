@@ -1,5 +1,6 @@
 import { CONTENT } from './catalog.js';
 import { teacherPage } from './teacher-page.js';
+import { Placement } from './placement.js';
 
 const enc = new TextEncoder();
 const lessons = new Map(CONTENT.lessons.map(l => [l.id, l]));
@@ -101,6 +102,10 @@ async function session(request, env) {
   insist(row,'Enter your code again.',401);
   const {success} = await env.ACTIVITY_LIMITER.limit({key:row.id}); insist(success,'Take a moment, then try again.',429); return row;
 }
+function placementView(row,learner){
+  if(!row)return JSON.parse(learner.plan_json).length?null:{generation:1,status:'pending',answers:[],result:null};
+  return {generation:row.generation,status:row.status,answers:JSON.parse(row.answers_json),result:row.result_json?JSON.parse(row.result_json):null};
+}
 async function learnerView(env, learner) {
   const plan = JSON.parse(learner.plan_json);
   const {results} = await env.DB.prepare('SELECT id, lesson_id, revision, complete, snapshot_json, updated_at FROM runs WHERE learner_id = ? AND plan_version = ? ORDER BY updated_at DESC LIMIT 200').bind(learner.id,learner.plan_version).all();
@@ -109,7 +114,9 @@ async function learnerView(env, learner) {
   const completedStories=[...new Set(results.filter(r=>r.complete&&r.lesson_id===storiesId).map(r=>JSON.parse(r.snapshot_json).story))];
   const completed = [...new Set(results.filter(r => r.complete && r.lesson_id!==storiesId).map(r => r.lesson_id))];
   if(completedStories.length===CONTENT.stories.length)completed.push(storiesId);
-  return { readerNumber: learner.reader_number, plan, planVersion: learner.plan_version, completed, completedStories,
+  const placementRow=await env.DB.prepare('SELECT * FROM placements WHERE learner_id = ?').bind(learner.id).first();
+  const practiceStatus=plan.map(lessonId=>{const finished=results.filter(r=>r.lesson_id===lessonId&&r.complete);const latest=finished[0];const snap=latest?JSON.parse(latest.snapshot_json):null,st=snap?(snap.type==='story'?snap.storyStats:snap.stats):null;return {lessonId,finishedRuns:finished.length,needsSupport:!!st&&st.help>=Math.ceil(st.total/3),firstTry:st?.first||0,total:st?.total||0};});
+  return { readerNumber: learner.reader_number, plan, planVersion: learner.plan_version, completed, completedStories, practiceStatus, lastCompletedLessonId:results.find(r=>r.complete)?.lesson_id||null, placement:placementView(placementRow,learner),
     resume: last ? {runId:last.id,lessonId:last.lesson_id,revision:last.revision,snapshot:JSON.parse(last.snapshot_json)} : null };
 }
 function plan(value) { const a = array(value,0,38).map(id => pick(id,[...lessons.keys()])); insist(new Set(a).size === a.length); return a; }
@@ -122,23 +129,45 @@ async function routes(request, env, ctx) {
     if (path === '/teacher' && request.method === 'GET') return teacherPage();
     if (path === '/teacher/api/readers' && request.method === 'GET') {
       const {results} = await env.DB.prepare('SELECT id, reader_number, plan_json, plan_version, created_at FROM learners WHERE owner_id = ? ORDER BY reader_number').bind(who.owner).all();
-      return json({email:who.email,catalog:CONTENT.lessons.map(({id,name,stage,kind,words})=>({id,name,stage,kind:kind||'words',examples:kind==='stories'?[]:(words||[]).slice(0,3)})),observations,readers:results.map(r=>({id:r.id,readerNumber:r.reader_number,plan:JSON.parse(r.plan_json),planVersion:r.plan_version}))});
+      const checks=await env.DB.prepare('SELECT p.* FROM placements p JOIN learners l ON l.id = p.learner_id WHERE l.owner_id = ?').bind(who.owner).all();
+      return json({email:who.email,catalog:CONTENT.lessons.map(({id,name,stage,kind,words})=>({id,name,stage,kind:kind||'words',examples:kind==='stories'?[]:(words||[]).slice(0,3)})),observations,readers:results.map(r=>({id:r.id,readerNumber:r.reader_number,plan:JSON.parse(r.plan_json),planVersion:r.plan_version,placement:placementView(checks.results.find(p=>p.learner_id===r.id),r)}))});
     }
     if (path === '/teacher/api/readers' && request.method === 'POST') {
       const count = await env.DB.prepare('SELECT COUNT(*) AS n FROM learners WHERE owner_id = ?').bind(who.owner).first(); insist(count.n < 100,'This pilot supports up to 100 readers per teacher.',409);
       const c = code(), id = crypto.randomUUID();
-      await env.DB.prepare('INSERT INTO learners (id, owner_id, code_hash, created_at) VALUES (?, ?, ?, ?)').bind(id,who.owner,await secretHash('code:'+c,env),Date.now()).run();
+      await env.DB.batch([
+        env.DB.prepare('INSERT INTO learners (id, owner_id, code_hash, created_at) VALUES (?, ?, ?, ?)').bind(id,who.owner,await secretHash('code:'+c,env),Date.now()),
+        env.DB.prepare('INSERT INTO placements (learner_id,updated_at) VALUES (?,?)').bind(id,Date.now())
+      ]);
       const row = await owned(env,who.owner,id); return json({id,readerNumber:row.reader_number,code:c.match(/.{4}/g).join('-')},201);
     }
-    const match = path.match(/^\/teacher\/api\/readers\/([a-f0-9-]+)(?:\/(plan|code|observation))?$/);
+    const match = path.match(/^\/teacher\/api\/readers\/([a-f0-9-]+)(?:\/(plan|code|observation|placement|approve))?$/);
     if (match) {
       const learner = await owned(env,who.owner,match[1]);
       if (match[2] === 'plan' && request.method === 'PUT') {
         const b = await body(request), ids = plan(b.lessonIds); int(b.planVersion,1,1000000);
         insist(b.planVersion === learner.plan_version,'The plan changed in another window. Reload and try again.',409);
         if (equalArrays(ids,JSON.parse(learner.plan_json))) return json({ok:true,planVersion:learner.plan_version,unchanged:true});
-        const result = await env.DB.prepare('UPDATE learners SET plan_json = ?, plan_version = plan_version + 1 WHERE id = ? AND owner_id = ? AND plan_version = ?').bind(JSON.stringify(ids),learner.id,who.owner,b.planVersion).run();
+        const [result] = await env.DB.batch([
+          env.DB.prepare('UPDATE learners SET plan_json = ?, plan_version = plan_version + 1 WHERE id = ? AND owner_id = ? AND plan_version = ?').bind(JSON.stringify(ids),learner.id,who.owner,b.planVersion),
+          env.DB.prepare("UPDATE placements SET status = 'overridden', updated_at = ? WHERE learner_id = ? AND EXISTS(SELECT 1 FROM learners WHERE id=? AND owner_id=? AND plan_version=?)").bind(Date.now(),learner.id,learner.id,who.owner,b.planVersion+1)
+        ]);
         insist(result.meta.changes === 1,'The plan changed in another window. Reload and try again.',409); return json({ok:true,planVersion:b.planVersion+1});
+      }
+      if (match[2] === 'approve' && request.method === 'POST') {
+        const b=await body(request);insist(b.planVersion===learner.plan_version,'The plan changed. Reload before reviewing it.',409);
+        const r=await env.DB.prepare("UPDATE placements SET status='reviewed',updated_at=? WHERE learner_id=? AND status='complete' AND EXISTS(SELECT 1 FROM learners WHERE id=? AND plan_version=?)").bind(Date.now(),learner.id,learner.id,b.planVersion).run();
+        insist(r.meta.changes===1,'Reload to see the current starting plan.',409);return json({ok:true});
+      }
+      if (match[2] === 'placement' && request.method === 'POST') {
+        const b=await body(request);insist(b.planVersion===learner.plan_version,'The plan changed in another window. Reload and try again.',409);
+        const now=Date.now(),old=await env.DB.prepare('SELECT generation FROM placements WHERE learner_id=?').bind(learner.id).first(),generation=(old?.generation||0)+1;
+        const changed=await env.DB.batch([
+          env.DB.prepare("INSERT INTO placements (learner_id,generation,updated_at) SELECT id,?,? FROM learners WHERE id=? AND owner_id=? AND plan_version=? ON CONFLICT(learner_id) DO UPDATE SET generation=excluded.generation,status='pending',answers_json='[]',result_json=NULL,started_at=NULL,completed_at=NULL,updated_at=excluded.updated_at WHERE placements.generation=?").bind(generation,now,learner.id,who.owner,b.planVersion,generation-1),
+          env.DB.prepare("UPDATE learners SET plan_json='[]',plan_version=plan_version+1 WHERE id=? AND owner_id=? AND plan_version=? AND EXISTS(SELECT 1 FROM placements WHERE learner_id=? AND generation=? AND status='pending' AND updated_at=?)").bind(learner.id,who.owner,b.planVersion,learner.id,generation,now)
+        ]);
+        insist(changed[0].meta.changes===1&&changed[1].meta.changes===1,'Reload and try again.',409);
+        return json({ok:true});
       }
       if (match[2] === 'code' && request.method === 'POST') {
         const c = code(); await env.DB.batch([
@@ -163,14 +192,16 @@ async function routes(request, env, ctx) {
         r.targets=[...new Set([...r.targets,...JSON.parse(e.targets_json)])]; r.updated_at=e.updated_at;
       }
       const obs = await env.DB.prepare('SELECT l.reader_number, o.lesson_id, o.observation, o.created_at FROM observations o JOIN learners l ON l.id = o.learner_id WHERE l.owner_id = ? AND o.created_at >= ? AND o.created_at < ? ORDER BY l.reader_number, o.created_at').bind(who.owner,from,to).all();
-      return json({from,to,runs:[...grouped.values()],observations:obs.results.map(o=>({...o,lessonName:lessons.get(o.lesson_id).name}))});
+      const checks=await env.DB.prepare('SELECT l.reader_number,p.result_json,p.completed_at,p.status FROM placements p JOIN learners l ON l.id=p.learner_id WHERE l.owner_id=? AND p.completed_at>=? AND p.completed_at<? ORDER BY p.completed_at').bind(who.owner,from,to).all();
+      return json({from,to,placements:checks.results.map(p=>({readerNumber:p.reader_number,result:JSON.parse(p.result_json),completedAt:p.completed_at,status:p.status})),runs:[...grouped.values()],observations:obs.results.map(o=>({...o,lessonName:lessons.get(o.lesson_id).name}))});
     }
     if (path === '/teacher/api/export' && request.method === 'GET') {
       const readers=await env.DB.prepare('SELECT id, reader_number, plan_json, plan_version, created_at FROM learners WHERE owner_id = ? ORDER BY reader_number').bind(who.owner).all();
       const runs=await env.DB.prepare('SELECT r.* FROM runs r JOIN learners l ON l.id = r.learner_id WHERE l.owner_id = ? ORDER BY r.created_at').bind(who.owner).all();
       const obs=await env.DB.prepare('SELECT o.* FROM observations o JOIN learners l ON l.id = o.learner_id WHERE l.owner_id = ? ORDER BY o.created_at').bind(who.owner).all();
       const events=await env.DB.prepare('SELECT e.* FROM activity_events e JOIN runs r ON r.id = e.run_id JOIN learners l ON l.id = r.learner_id WHERE l.owner_id = ? ORDER BY e.created_at').bind(who.owner).all();
-      return json({format:'reading-room-export-1',exportedAt:Date.now(),readers:readers.results,runs:runs.results,observations:obs.results,events:events.results});
+      const checks=await env.DB.prepare('SELECT p.* FROM placements p JOIN learners l ON l.id=p.learner_id WHERE l.owner_id=?').bind(who.owner).all();
+      return json({placements:checks.results,format:'reading-room-export-2',exportedAt:Date.now(),readers:readers.results,runs:runs.results,observations:obs.results,events:events.results});
     }
     throw new Problem(404,'Page not found.');
   }
@@ -191,6 +222,31 @@ async function routes(request, env, ctx) {
   const learner = await session(request,env);
   if (path === '/v1/me' && request.method === 'GET') return json(await learnerView(env,learner));
   if (path === '/v1/logout' && request.method === 'POST') { await env.DB.prepare('DELETE FROM sessions WHERE token_hash = ?').bind(await hash(request.headers.get('authorization').slice(7))).run(); return json({ok:true}); }
+  if (path === '/v1/placement/start' && request.method === 'POST') {
+    const b=await body(request);insist(b.planVersion===learner.plan_version,'Your practice changed. Check for a new plan.',409);
+    await env.DB.prepare("INSERT OR IGNORE INTO placements (learner_id,updated_at) SELECT id,? FROM learners WHERE id=? AND plan_version=? AND plan_json='[]'").bind(Date.now(),learner.id,b.planVersion).run();
+    const current=await env.DB.prepare('SELECT * FROM learners WHERE id=?').bind(learner.id).first();
+    const row=await env.DB.prepare('SELECT * FROM placements WHERE learner_id=?').bind(learner.id).first();
+    insist(row&&row.status==='pending','Your starting check is not available. Check for a new plan.',409);
+    return json(await learnerView(env,current));
+  }
+  if (path === '/v1/placement' && request.method === 'PUT') {
+    const b=await body(request);int(b.generation,1,1000000);
+    const row=await env.DB.prepare('SELECT * FROM placements WHERE learner_id=?').bind(learner.id).first();
+    insist(row&&row.generation===b.generation,'Your starting check changed. Check for a new plan.',409);
+    const answers=Placement.validate(JSON.parse(row.answers_json)),last=answers.at(-1);
+    if(last&&last.id===b.itemId&&last.answer===b.answer)return json(await learnerView(env,learner));
+    insist(row.status==='pending'&&b.planVersion===learner.plan_version,'Your practice changed. Check for a new plan.',409);
+    const q=Placement.next(answers);insist(q&&q.id===b.itemId,'Resume your starting check before answering.',409);int(b.answer,-1,q.choices.length-1);
+    const updated=[...answers,{id:q.id,answer:b.answer}],done=!Placement.next(updated),result=done?Placement.result(updated):null;
+    const now=Date.now(),serialized=JSON.stringify(updated),resultText=result?JSON.stringify(result):null;
+    const statements=[env.DB.prepare("UPDATE placements SET answers_json=?,result_json=?,status=?,started_at=COALESCE(started_at,?),completed_at=?,updated_at=? WHERE learner_id=? AND generation=? AND answers_json=? AND status='pending' AND EXISTS(SELECT 1 FROM learners WHERE id=? AND plan_version=?)").bind(serialized,resultText,done?'complete':'pending',now,done?now:null,now,learner.id,b.generation,row.answers_json,learner.id,b.planVersion)];
+    if(done)statements.push(env.DB.prepare("UPDATE learners SET plan_json=?,plan_version=plan_version+1 WHERE id=? AND plan_version=? AND EXISTS(SELECT 1 FROM placements WHERE learner_id=? AND generation=? AND answers_json=? AND result_json=? AND completed_at=? AND status='complete')").bind(JSON.stringify(plan(result.plan)),learner.id,b.planVersion,learner.id,b.generation,serialized,resultText,now));
+    const saved=await env.DB.batch(statements);
+    insist(saved[0].meta.changes===1,'Your check changed in another window. Check for a new plan.',409);
+    const current=await env.DB.prepare('SELECT * FROM learners WHERE id=?').bind(learner.id).first();
+    return json(await learnerView(env,current));
+  }
   if (path === '/v1/progress' && request.method === 'PUT') {
     const b = await body(request); safeId(b.runId); int(b.revision,1,1000000);
     insist(b.planVersion===learner.plan_version,'Your teacher changed your practice. Return to your practice list.',409);
