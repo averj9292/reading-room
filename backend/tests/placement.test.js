@@ -14,10 +14,12 @@ test('routes shorten after difficulty, retain listening, and distinguish unteste
   assert.throws(()=>Placement.validate([{id:'reading',answer:0}]));
   assert.throws(()=>Placement.result([]));
 });
-test('guided steps resume, revisit a supported lesson once, alternate stories, and finish without mastery labels',()=>{
+test('guided steps resume, flag persistent support for teacher review, alternate stories, and finish without mastery labels',()=>{
   const p={plan:['sh','ch','stories'],completed:[],completedStories:[],practiceStatus:[]};assert.deepEqual(Placement.nextPractice(p),{kind:'lesson',lessonId:'sh'});
   p.completed=['sh'];p.practiceStatus=[{lessonId:'sh',finishedRuns:1,needsSupport:true}];assert.equal(Placement.nextPractice(p).kind,'review');
-  p.practiceStatus[0].finishedRuns=2;assert.equal(Placement.nextPractice(p).lessonId,'ch');
+  p.practiceStatus[0].finishedRuns=2;assert.deepEqual(Placement.nextPractice(p),{kind:'teacher-review',lessonId:'sh'});
+  p.practiceStatus[0].finishedRuns=9;assert.equal(Placement.nextPractice(p).kind,'teacher-review');
+  p.practiceStatus[0].needsSupport=false;assert.equal(Placement.nextPractice(p).lessonId,'ch');
   p.lastCompletedLessonId='sh';assert.equal(Placement.nextPractice(p).kind,'story');
   p.lastCompletedLessonId='stories';assert.equal(Placement.nextPractice(p).lessonId,'ch');
   p.resume={lessonId:'sh'};assert.equal(Placement.nextPractice(p).kind,'resume');

@@ -94,7 +94,7 @@ const Placement=(()=>{
     const status=profile.practiceStatus||[];
     for(const id of profile.plan){
       const s=status.find(s=>s.lessonId===id);
-      if(s?.needsSupport&&s.finishedRuns<2)return {kind:'review',lessonId:id};
+      if(s?.needsSupport)return {kind:s.finishedRuns<2?'review':'teacher-review',lessonId:id};
       if(!profile.completed.includes(id))return {kind:'lesson',lessonId:id};
     }
     return profile.plan.length?{kind:'finished',lessonId:profile.plan[0]}:{kind:'waiting'};

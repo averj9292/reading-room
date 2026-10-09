@@ -115,3 +115,28 @@ Started from main `a544a413a2bf2d315844cf78e705e480cc545309`. This work was requ
 
 - Pennell should try one word-pattern lesson and review one reader summary, checking whether the cue and suggested adult check fit her teaching. Add specific teaching content based on that feedback.
 - Replace audio only after the user chooses a satisfactory ElevenLabs sample. Physical iPad Safari and VoiceOver still require device testing.
+
+## 2026-10-09: supplementary practice and persistent-support review
+
+Started from main `9883aed271acdfe6dac00b01e2464c58a89fb8eb`. The goal is additional teacher-directed practice, not replacing a licensed intervention.
+
+### Changes
+
+- Removed automatic advancement after two supported completed runs. A lesson still flagged for support now recommends a teacher check, with a clear option to revisit and an authenticated plan-refresh action. No mastery or reading-level label is introduced. Resume and teacher assignment remain available; a subsequent independent run can clear the support signal.
+- Added an original printable teaching pack for all five short vowels plus sh and ch. Each includes a model/teaching cue, three words absent from that lesson's app bank, sentence reading and three separate later-review words. Teachers hear responses directly and keep observations offline; three words are explicitly not a validated pass threshold.
+- Linked the pack from the teacher-review screen and the learner app's grown-up information. No new identity fields, tracking, recording, audio generation or backend/database deployment.
+
+### Validation
+
+- Build and all 18 regression tests passed. Progression tests cover support persisting beyond two and nine completed runs, clearing support, resume, story alternation and completion.
+- New local Chromium touch checks passed 36 assertions at 768×1024, 1024×768, 507×768 and 768×507: teacher-review route, revisit, independent-next route, visible touch target, overflow, seven teaching cards and print visibility, with no script errors.
+- Existing teaching/report checks passed all 364 assertions with no script errors. Full tablet and mocked code flow validation is recorded below once complete.
+- Fresh-word lists were checked against each selected lesson's app word bank. The sentence examples are explicitly described as teacher-selected reading rather than a controlled decodable sequence.
+
+### Next useful steps
+
+- Add original learner-facing fresh-item checks and delayed cumulative review with a resumable, privacy-preserving record design. Current fresh-word and delayed checks are teacher-led, not an automatic app assessment.
+- Extend error-specific contrasts and pattern-linked reading into the remaining strands, then expand multisyllabic words and comprehension. Trial the first pack with a teacher before expanding indiscriminately.
+- Physical iPad Safari/VoiceOver and learning outcomes remain unverified. No claim about who needs less support or benefits most can be made from app counts alone.
+
+- Full existing tablet suite passed 488 assertions across six tablet/split-screen/phone sizes with zero script errors. Mocked code login, complete starting check, reload/resume, save retry, plan-change recovery and sign-out also passed with zero script errors. Built script passed Node syntax checking. The uploaded index blob exactly matched the tested local build's Git SHA.
