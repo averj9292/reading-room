@@ -122,7 +122,7 @@ async function routes(request, env, ctx) {
     if (path === '/teacher' && request.method === 'GET') return teacherPage();
     if (path === '/teacher/api/readers' && request.method === 'GET') {
       const {results} = await env.DB.prepare('SELECT id, reader_number, plan_json, plan_version, created_at FROM learners WHERE owner_id = ? ORDER BY reader_number').bind(who.owner).all();
-      return json({email:who.email,catalog:CONTENT.lessons.map(({id,name,stage,kind})=>({id,name,stage,kind:kind||'words'})),observations,readers:results.map(r=>({id:r.id,readerNumber:r.reader_number,plan:JSON.parse(r.plan_json),planVersion:r.plan_version}))});
+      return json({email:who.email,catalog:CONTENT.lessons.map(({id,name,stage,kind,words})=>({id,name,stage,kind:kind||'words',examples:kind==='stories'?[]:(words||[]).slice(0,3)})),observations,readers:results.map(r=>({id:r.id,readerNumber:r.reader_number,plan:JSON.parse(r.plan_json),planVersion:r.plan_version}))});
     }
     if (path === '/teacher/api/readers' && request.method === 'POST') {
       const count = await env.DB.prepare('SELECT COUNT(*) AS n FROM learners WHERE owner_id = ?').bind(who.owner).first(); insist(count.n < 100,'This pilot supports up to 100 readers per teacher.',409);
@@ -135,6 +135,8 @@ async function routes(request, env, ctx) {
       const learner = await owned(env,who.owner,match[1]);
       if (match[2] === 'plan' && request.method === 'PUT') {
         const b = await body(request), ids = plan(b.lessonIds); int(b.planVersion,1,1000000);
+        insist(b.planVersion === learner.plan_version,'The plan changed in another window. Reload and try again.',409);
+        if (equalArrays(ids,JSON.parse(learner.plan_json))) return json({ok:true,planVersion:learner.plan_version,unchanged:true});
         const result = await env.DB.prepare('UPDATE learners SET plan_json = ?, plan_version = plan_version + 1 WHERE id = ? AND owner_id = ? AND plan_version = ?').bind(JSON.stringify(ids),learner.id,who.owner,b.planVersion).run();
         insist(result.meta.changes === 1,'The plan changed in another window. Reload and try again.',409); return json({ok:true,planVersion:b.planVersion+1});
       }

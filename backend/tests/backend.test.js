@@ -48,6 +48,9 @@ test('authenticated classroom workflow, resume, weekly deltas, ownership, code r
   await data(await save(2,snapshot(1)));
   const resumed=await data(await request(e,'/v1/me',{token:login.token}));
   assert.equal(resumed.resume.snapshot.index,1);assert.equal(resumed.resume.revision,2);
+  const samePlan=await data(await request(e,'/teacher/api/readers/'+created.id+'/plan',{method:'PUT',body:{lessonIds:[lesson.id],planVersion:2},ctx:a}));
+  assert.equal(samePlan.unchanged,true);assert.equal(samePlan.planVersion,2);
+  assert.equal((await data(await request(e,'/v1/me',{token:login.token}))).resume.snapshot.index,1);
   const start=Date.now()-10000,pivot=Date.now()+1000,originalNow=Date.now;
   Date.now=()=>pivot+1000;
   try{await data(await save(3,snapshot(2)));}finally{Date.now=originalNow;}

@@ -48,7 +48,7 @@ There are no student-name, student-email, birthdate, school, photo, microphone, 
 
 Learner codes and tokens remain in browser memory, not local storage or cookies. Reloading requires code entry again. Progress saves while online; unsent work remains only in the open tab. A save failure is displayed with a Retry save button. Closing an unsaved tab can lose its recent work. Shared-device users should finish and sign out.
 
-Changing a practice plan begins a new assignment version. Earlier activity remains in reports; an old in-progress activity cannot continue against the new plan. Students choose only assigned lessons in connected mode. A completed lesson is labelled Practised, not mastered. The teacher chooses next steps.
+Choose one Starting skill in the teacher dashboard and save. The starting skill is included automatically; additional lessons are optional. Saving an unchanged plan preserves its version and any activity in progress. Changing a practice plan begins a new assignment version. Earlier activity remains in reports; an old in-progress activity cannot continue against the new plan. Students choose only assigned lessons in connected mode. A completed lesson is labelled Practised, not mastered. The teacher chooses next steps.
 
 ## Reports, exports and record removal
 
