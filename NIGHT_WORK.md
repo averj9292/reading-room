@@ -24,3 +24,26 @@ Started from main `2c73aad1ef2826131a9978a19a9811ecbc4e5f0a`. No prior `NIGHT_WO
 
 - Test physical iPad Safari code keyboard behavior, audio playback, safe-area insets, and rotation. Chromium emulation cannot establish Safari-specific behavior. The synthetic mocked-service checks cannot establish live Cloudflare account/setup behavior.
 - On the next UI pass, inspect long story/question combinations and pending-save feedback in small split-screen. Fix only a reproduced issue; preserve the current single-next-step learner route and bundled audio.
+
+## 2026-10-09: overlapping-save recovery
+
+Started from main `f202c68083262fe90d34d5aa0f5c147b416ecdbc` and reviewed the prior tablet findings above before changing code.
+
+### Findings and changes
+
+- Reproduced an overlapping-save race: if an older progress request failed while a newer snapshot for the same run was already queued, the older snapshot could be silently re-added after the newer one saved. The server rejected stale revisions safely, but the learner page could retain a stale pending item and misleading save state.
+- The client now tracks the newest unsaved payload for each run. A failed older request cannot replace that newer payload; only the newest successful revision clears the run's unsaved state and the Retry save control.
+- Login, sign-out, and teacher-plan conflict paths clear this client-only tracking together with the existing pending queue. Authentication, backend storage, and learner record formats are unchanged.
+- A 507 × 768 forced-outage check found the dynamically created Retry save button was 42 px high because the legacy `.smallbtn` selector overrode the generic tablet rule. It is now 48 px high and passes the same split-screen overflow check as the rest of the learner controls.
+
+### Validation
+
+- `npm run build` and all 15 `npm test` tests passed. The new regression test delays and fails revision 1 while revision 2 is queued, then verifies that only revision 2 saves and that no stale pending payload remains.
+- Chromium 153 touch emulation again passed 488 assertions across 1024 × 768, 768 × 1024, 1180 × 820, 820 × 1180, 507 × 768, and 390 × 844 with zero script errors.
+- The mocked classroom browser flow passed code login, starting-check reload/resume, recommended lesson launch, practice reload/resume, a forced 503 save failure, visible 48 px Retry save recovery at 507 × 768, and sign-out. It used synthetic in-memory records and made no production learner requests.
+- Bundled audio was not changed. No backend, database, authentication, content, student fields, tracking, or microphone behavior changed.
+
+### Next useful step
+
+- On a physical iPad, verify Safari audio playback, the on-screen keyboard for code entry, safe-area insets, rotation, and Retry save during an actual interrupted connection. Chromium emulation cannot establish those Safari-specific behaviors.
+- In the next code pass, examine whether starting-check answer-save failures need the same top-of-screen visibility improvement in small landscape; fix only if reproduced.

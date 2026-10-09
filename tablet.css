@@ -3,7 +3,7 @@ html{-webkit-text-size-adjust:100%;scroll-padding-bottom:24px}
 button,a.quiet,summary{min-height:48px;min-width:48px;touch-action:manipulation}
 button,input,summary{-webkit-tap-highlight-color:transparent}
 input{font-size:18px}
-.audio.smallbtn{min-height:48px}
+.smallbtn,.audio.smallbtn{min-height:48px}
 .textbutton,.playanswer{padding:10px 12px;border-radius:10px}
 .textbutton:focus-visible,.playanswer:focus-visible,input:focus-visible{outline:3px solid #b56300;outline-offset:3px}
 .panel,main,.answerbox,.story-passage,.story-questions{min-width:0}

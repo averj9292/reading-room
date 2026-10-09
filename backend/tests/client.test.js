@@ -10,10 +10,11 @@ function fixture() {
   const nodes={app:element(),overlay:element()};
   const document={getElementById(id){return nodes[id]??(nodes[id]=element());},querySelector(){return element();},createElement:element,body:element(),activeElement:element(),addEventListener(){}};
   class Audio {pause(){}play(){return Promise.resolve();}addEventListener(){}}
-  const writes=[],saved=new Map();let fail=false,conflict=false,serverProfile=null;
+  const writes=[],saved=new Map();let fail=false,conflict=false,serverProfile=null,delayFailure=false,releaseDelayed;
   const sandbox={document,Audio,window:{scrollTo(){}},setTimeout(){return 1;},clearTimeout(){},queueMicrotask(fn){fn();},crypto,Math,Blob,URL,location:{protocol:'https:'},AbortController,
     async fetch(url,options){if(fail)throw Error('Network offline');const b=options.body?JSON.parse(options.body):{};
       if(url.endsWith('/me'))return new Response(JSON.stringify(serverProfile));
+      if(url.endsWith('/progress')&&delayFailure){delayFailure=false;await new Promise(resolve=>{releaseDelayed=resolve;});throw Error('Network offline');}
       if(url.endsWith('/progress')&&conflict){conflict=false;return new Response('{"error":"Your teacher changed your plan."}',{status:409});}
       if(url.endsWith('/progress')){cleanSnapshot(b.snapshot,b.lessonId);writes.push(b);saved.set(b.runId,b);return new Response(JSON.stringify({ok:true,revision:b.revision}));}
       if(url.endsWith('/logout'))return new Response('{"ok":true}');throw Error('Unexpected endpoint');}};
@@ -22,7 +23,7 @@ function fixture() {
   const run=s=>vm.runInContext(s,c);run('connected.token="test-token";connected.profile={readerNumber:1,plan:CONTENT.lessons.map(l=>l.id),planVersion:1,completed:[],completedStories:[],resume:null}');
   function validate(){const snap=run('runSnapshot()');if(snap)cleanSnapshot(JSON.parse(JSON.stringify(snap)),run('connected.run.lessonId'));}
   function solve(){const q=run('state.current');if(q.mode==='build'){const used=new Set();for(const part of q.parts){const i=q.tiles.findIndex((t,j)=>t===part&&!used.has(j));used.add(i);run('addTile('+i+')');validate();}run('checkBuild()');}else run('choose('+q.choices.indexOf(q.word)+')');validate();run('nextQuestion()');validate();}
-  return {run,validate,solve,writes,saved,fail(value){fail=value;},conflict(){conflict=true;},profile(value){serverProfile=value;}};
+  return {run,validate,solve,writes,saved,fail(value){fail=value;},delayFailure(){delayFailure=true;},releaseFailure(){releaseDelayed();},conflict(){conflict=true;},profile(value){serverProfile=value;}};
 }
 
 test('all learner activity snapshots round-trip through backend validation',async()=>{
@@ -58,6 +59,19 @@ test('keeps separate runs queued during failures and avoids duplicate writes for
   f.run('teach('+ids[1]+');startPractice()');await f.run('flushProgress()');assert.equal(f.run('connected.pending.size'),2);
   f.fail(false);await f.run('flushProgress()');assert.equal(f.run('connected.pending.size'),0);assert.equal(f.writes.length,2);
   f.run('markProgress();markProgress()');await f.run('flushProgress()');assert.equal(f.writes.length,2);
+});
+
+test('an older failed save cannot replace a newer queued snapshot',async()=>{
+  const f=fixture(),i=CONTENT.lessons.findIndex(l=>l.id==='sh');
+  f.run('teach('+i+');startPractice()');f.delayFailure();
+  const older=f.run('flushProgress()');
+  await new Promise(resolve=>setImmediate(resolve));
+  f.run('hint()');const expected=f.run('connected.run.revision');
+  const newer=f.run('flushProgress()');
+  f.releaseFailure();await Promise.all([older,newer]);
+  assert.equal(f.writes.length,1);assert.equal(f.writes[0].revision,expected);
+  assert.equal(f.run('connected.pending.size'),0);assert.equal(f.run('connected.latest.size'),0);
+  assert.equal(f.run('connected.notice'),'Your place is saved.');
 });
 
 
