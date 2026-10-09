@@ -9,13 +9,13 @@
   },
   "vars": {
     "FRONTEND_ORIGIN": "https://averj9292.github.io",
-    "ACCESS_AUD": "REPLACE_WITH_TEACHER_ACCESS_APPLICATION_AUDIENCE"
+    "ACCESS_AUD": "28274e8f3efb0b6849f1511c71c8a16a20907664932e7e777891d633c1f47a54"
   },
   "d1_databases": [
     {
       "binding": "DB",
       "database_name": "reading-room",
-      "database_id": "REPLACE_WITH_D1_DATABASE_ID"
+      "database_id": "36401c47-d0b6-44ca-ba7c-234f489c5f15"
     }
   ],
   "ratelimits": [

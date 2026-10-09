@@ -1,6 +1,6 @@
 # Connect the classroom backend
 
-The backend code is ready for Cloudflare Workers + D1. It has been tested locally, but is not a live classroom service until the settings below are configured and verified. The public app remains open practice while `backend-url.txt` is empty.
+The backend is deployed at https://reading-room.averyjconsulting.workers.dev with its D1 database, private code secret, rate-limit bindings, and path-scoped Cloudflare Access. Teacher sign-in initially allows the Cloudflare account owner only. The live health check and signed-out protection for teacher pages and API paths have been verified. The owner still needs to sign in, create a disposable reader, and complete the classroom checks below before real classroom use. `backend-url.txt` enables learner code entry; open practice remains available.
 
 ## Your existing GitHub-connected Worker
 
@@ -34,7 +34,7 @@ Current references: [path-scoped Access and verified Worker identity](https://de
 6. In a signed-out browser, verify teacher paths require Access sign-in. Learner codes must not grant teacher access, list other readers, or retrieve reports. A different teacher must see only the readers they created.
 7. Replace the test code; verify the old code and existing learner session stop working. After testing, remove the disposable test reader through the dashboard.
 
-The backend source is ready; real Cloudflare deployment and these live checks still need to pass before classroom use.
+The backend is deployed; the signed-in teacher and learner workflow checks above still need to pass before classroom use.
 
 ## What is saved
 

@@ -12,7 +12,7 @@ Audio, letter-tile building, vocabulary, prefixes and suffixes, hints and retrie
 
 The repo now includes a Cloudflare Workers + D1 backend, teacher dashboard, and optional learner-code integration. Teachers assign practice to reader numbers, keep their student-to-code list offline, enter structured read-aloud observations, and print weekly reports. Learners can resume the saved question, including hint and retry state. Teacher records are separated by the signed-in teacher.
 
-The backend is prepared and locally tested, not automatically configured by connecting this repo. Follow [DEPLOYMENT.md](DEPLOYMENT.md) to configure the D1 database, secret, Cloudflare Access teacher sign-in, and public Worker URL. Missing configuration fails closed. The learner app stays in open practice while `backend-url.txt` is empty.
+The backend is deployed at https://reading-room.averyjconsulting.workers.dev. Learner code entry is enabled alongside open practice. Teacher access initially allows the Cloudflare account owner only. Health and signed-out teacher protection have passed live checks; the owner still needs to sign in and verify a disposable reader end to end. See [DEPLOYMENT.md](DEPLOYMENT.md) for setup and classroom verification. Missing configuration fails closed.
 
 ## Hosting and offline
 
