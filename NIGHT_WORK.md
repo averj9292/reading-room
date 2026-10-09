@@ -47,3 +47,25 @@ Started from main `f202c68083262fe90d34d5aa0f5c147b416ecdbc` and reviewed the pr
 
 - On a physical iPad, verify Safari audio playback, the on-screen keyboard for code entry, safe-area insets, rotation, and Retry save during an actual interrupted connection. Chromium emulation cannot establish those Safari-specific behaviors.
 - In the next code pass, examine whether starting-check answer-save failures need the same top-of-screen visibility improvement in small landscape; fix only if reproduced.
+
+## 2026-10-09: starting-check retry focus
+
+Started from main `3be85c7589ca29caed2d74a4d381b81642b80d96` and reviewed both prior entries before testing the remaining starting-check failure path.
+
+### Findings and changes
+
+- A forced starting-check save outage at 768 × 507 kept the retry button and message visible, so the layout did not need to change.
+- The failure did leave focus on the now-disabled answer control. Keyboard, switch-control, or assistive-technology users could receive the live error message but have no focused action to continue. The app now moves focus to `Retry saving this answer` after the asynchronous failure. This also makes the recovery action explicit without changing the selected answer or learner route.
+- The browser flow now reaches the longer reading-passage section with correct synthetic answers, forces a 503 on one passage answer, verifies that retry is focused and fully inside the small-landscape viewport, saves the same pending answer, and finishes the original 28-question route.
+
+### Validation
+
+- `npm run build` and all 15 `npm test` tests passed.
+- Chromium 153 touch emulation passed the 488 existing layout/learner assertions across six portrait, landscape, and split-screen sizes with zero script errors.
+- The mocked classroom flow passed code login, first-answer reload/resume, the full 28-question starting check, long-passage failure/retry at 768 × 507, recommendation, practice reload/resume, practice-save failure/retry, and sign-out. No production learner records or services were used.
+- Bundled audio remained byte-for-byte unchanged. No backend, database, authentication, learner-record format, content, tracking, student fields, or microphone behavior changed.
+
+### Next useful step
+
+- Physical iPad Safari remains the meaningful unverified layer: test the code keyboard, audio playback, safe-area insets, rotation, VoiceOver focus announcement, and interrupted-connection retry.
+- For another automated pass, inspect focus and recovery after a teacher changes the plan while a learner still has a practice screen open. Avoid further visual changes unless a concrete issue is reproduced.
